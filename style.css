@@ -1,0 +1,57 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f6eef3;
+  text-align: center;
+}
+
+h1 {
+  margin-top: 20px;
+}
+
+#CanvasToolBar {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 16px;
+}
+
+button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  background: #d88fb3;
+  color: white;
+  cursor: pointer;
+}
+
+#BoardWrapper {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+canvas {
+  border: 2px solid #8a5a44;
+  border-radius: 12px;
+}
+
+.hidden {
+    display: none;
+}
+
+#ItemsToolBar {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 16px;
+  background-image: url(assets/tabs/tabs.png);
+  background-repeat: repeat-x;
+  /*stick toolbar to the bottom of the page*/
+    position: fixed;
+    bottom: 0;
+    left: 7%;
+    width: 80%;
+}
