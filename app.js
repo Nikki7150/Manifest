@@ -21,23 +21,6 @@ addTextBtn.addEventListener("click", () => {
     canvas.renderAll();
 });
 
-// AddSticker button
-/*const addStickerBtn = document.getElementById("AddStickerButton");
-addStickerBtn.addEventListener("click", () => {
-    const stickerUrl = "https://cdn-icons-png.flaticon.com/512/616/616408.png"; // Example sticker URL
-    fabric.Image.fromURL(stickerUrl, (img) => {
-        img.set({
-            left: 150,
-            top: 150,
-            scaleX: 0.3,
-            scaleY: 0.3
-        });
-        canvas.add(img);
-        canvas.setActiveObject(img);
-        canvas.renderAll();
-    });
-});*/
-
 // UploadImage button
 const uploadImageBtn = document.getElementById("UploadImageButton");
 const imageInput = document.getElementById("ImageUploadInput");
@@ -127,4 +110,130 @@ sendBackwardBtn.addEventListener("click", () => {
         activeObject.sendBackwards();
         canvas.renderAll();
     }
+});
+
+
+// ToolBar button handlers (for switching between tabs)
+const toolbarBtns = document.querySelectorAll('#ToolBar button');
+toolbarBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        const map = {
+        sbtn: stickerModal,
+        dbtn: decorModal,
+        fbtn: frameModal
+        };
+        const targetModal = map[btn.id];
+        if (!targetModal) return;
+        if (activeModal === targetModal) {
+            return;
+        } else {
+            if (activeModal) {
+                activeModal.style.display = "none";
+                activeModal.classList.remove("slideUp", "slideDown");
+            }
+            activeModal = targetModal;
+            targetModal.style.display = "block";
+            targetModal.classList.remove("slideUp", "slideDown");
+            targetModal.style.height = "50%";
+            toolbar.style.display = "flex";
+            toolbar.style.zIndex = "101";
+        }
+    });
+});
+
+
+// sticker modal
+const stickerModalBtn = document.getElementById("StickersButton");
+const stickerModal = document.getElementById("stickerModal");
+const closeStickerBtn = document.getElementById("closeSticker");
+const toolbar = document.getElementById("ToolBar");
+
+stickerModalBtn.addEventListener("click", () => {
+    activeModal = stickerModal;
+    stickerModal.style.display = "block";
+    stickerModal.classList.add("slideUp");
+    stickerModal.style.height = "50%";
+    setTimeout(() => {
+        toolbar.style.display = "flex";
+        toolbar.style.zIndex = "101";
+    }, 500);
+});
+
+closeStickerBtn.addEventListener("click", () => {
+    stickerModal.classList.remove("slideUp");
+    toolbar.style.display = "none";
+    stickerModal.classList.add("slideDown");
+    setTimeout(() => {
+        stickerModal.style.display = "none";
+        stickerModal.classList.remove("slideDown");
+    }, 500);
+});
+
+
+// decor modal
+const decorModalBtn = document.getElementById("DecorButton");
+const decorModal = document.getElementById("decorModal");
+const closeDecorBtn = document.getElementById("closeDecor");
+
+decorModalBtn.addEventListener("click", () => {
+    activeModal = decorModal;
+    decorModal.classList.add("slideUp");
+    decorModal.style.display = "block";
+    decorModal.style.height = "50%";
+    toolbar.style.zIndex = "101";
+    toolbar.style.display = "flex";
+});
+
+closeDecorBtn.addEventListener("click", () => {
+    decorModal.classList.remove("slideUp");
+    toolbar.style.display = "none";
+    decorModal.classList.add("slideDown");
+    setTimeout(() => {
+        decorModal.style.display = "none";
+        decorModal.classList.remove("slideDown");
+    }, 500);
+});
+
+
+// frame modal
+const frameModalBtn = document.getElementById("FramesButton");
+const frameModal = document.getElementById("framesModal");
+const closeFrameBtn = document.getElementById("closeFrame");
+
+frameModalBtn.addEventListener("click", () => {
+    activeModal = frameModal;
+    frameModal.classList.add("slideUp");
+    frameModal.style.display = "block";
+    frameModal.style.height = "50%";
+    toolbar.style.display = "flex";
+    toolbar.style.zIndex = "101";
+});
+
+closeFrameBtn.addEventListener("click", () => {
+    frameModal.classList.remove("slideUp");
+    toolbar.style.display = "none";
+    frameModal.classList.add("slideDown");
+    setTimeout(() => {
+        frameModal.style.display = "none";
+        frameModal.classList.remove("slideDown");
+    }, 500);
+});
+
+// Adding stickers to canvas
+const stickers = document.querySelectorAll(".pre-sticker");
+stickers.forEach(sticker => {
+    sticker.addEventListener("click", () => {
+        const src = sticker.getAttribute("src");
+        fabric.Image.fromURL(src, (img) => {
+            img.set({
+                left: 150,
+                top: 150,
+                scaleX: 0.5,
+                scaleY: 0.5
+            });
+            canvas.add(img);
+            canvas.setActiveObject(img);
+            canvas.renderAll();
+        });
+    });
 });

@@ -14,6 +14,7 @@
             <button id="UploadImageButton">Upload</button>
             <button id="DeleteObject">Delete</button>
             <button id="DownloadBoard">Download</button>
+            <button id="ClearBoard">Clear Board</button>
             <input type="file" id="ImageUploadInput" accept="image/*" hidden />
             <button id="BringForward">Bring Forward</button>
             <button id="SendBackward">Send Backward</button>
@@ -23,39 +24,45 @@
             <canvas id="VisionBoard"></canvas>
         </div>
 
+        <img src="assets/tabs/temp-tabs.jpeg" id="TabsBackground" alt="Tabs Background">
         <div id="ItemsToolBar">
             <button id="StickersButton">Stickers</button>
             <button id="DecorButton">Decor</button>
             <button id="FramesButton">Frames</button>
         </div>
 
-        <div id="stickersModal" class="modal hidden">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h2>Stickers</h2>
-                <div id="stickerContainer" class="sticker-container">
-                    <img src="assets/stickers/kiss.png" class="sticker" alt="Sticker 1">
-                    <img src="assets/stickers/Screenshot 2026-04-06 at 2.39.56 PM.png" class="sticker" alt="Sticker 2">
+        <!-- Modals -->
+        <div id="modals">
+            <div id="ToolBar">
+                <button id="sbtn">Stickers</button>
+                <button id="dbtn">Decor</button>
+                <button id="fbtn">Frames</button>
+            </div>
+            <div id="stickerModal" class="modal hidden">
+                <div class="modal-content">
+                    <span id="closeSticker" class="close">&times;</span>
+                    <div id="stickerContainer" class="sticker-container">
+                        <img src="assets/stickers/kiss.png" class="pre-sticker" alt="Sticker 1">
+                        <img src="assets/stickers/Screenshot 2026-04-06 at 2.39.56 PM.png" class="pre-sticker" alt="Sticker 2">
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div id="decorModal" class="modal hidden">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h2>Decor</h2>
-                <div id="decorContainer" class="decor-container">
-                    <img src="assets/decor/bow.png" class="decor" alt="Decor 1">
+            <div id="decorModal" class="modal hidden">
+                <div id="modal-content">
+                    <span id="closeDecor" class="close">&times;</span>
+                    <div id="decorContainer" class="decor-container">
+                        <img src="assets/decor/bow.png" class="pre-sticker" alt="Decor 1">
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div id="framesModal" class="modal hidden">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h2>Frames</h2>
-                <div id="frameContainer" class="frame-container">
-                    <img src="assets/frames/headphones.png" class="frame" alt="Frame 1">
+            <div id="framesModal" class="modal hidden">
+                <div id="modal-content">
+                    <span id="closeFrame" class="close">&times;</span>
+                    <div id="frameContainer" class="frame-container">
+                        <img src="assets/frames/headphones.png" class="pre-sticker" alt="Frame 1">
+                    </div>
                 </div>
             </div>
         </div>
@@ -64,6 +71,3 @@
         <script src="app.js"></script>
     </body>
 </html>
-                </div>
-            </div>
-        </div>

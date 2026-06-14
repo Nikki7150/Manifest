@@ -3,6 +3,7 @@ body {
   font-family: Arial, sans-serif;
   background: #f6eef3;
   text-align: center;
+  overflow: hidden;
 }
 
 h1 {
@@ -21,7 +22,7 @@ button {
   padding: 10px 16px;
   border: none;
   border-radius: 10px;
-  background: #d88fb3;
+  background: rgb(230, 185, 207);
   color: white;
   cursor: pointer;
 }
@@ -41,17 +42,139 @@ canvas {
     display: none;
 }
 
+
+
+/* Animations */
+.slideUp {
+  animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.slideDown {
+  animation: slideDown 0.5s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
+
+.modal {
+  position: fixed;
+  bottom: 0;
+  left: 10%;
+  right: 10%;
+  width: 80%;
+  height: 13%;
+  /*background-color: rgb(230, 185, 207);*/
+  background-color: transparent;
+  display: flex;
+  border-radius: 12px;
+  overflow: hidden;
+  z-index: 50;
+}
+
+.hidden {
+  display: none;
+}
+
+.close {
+  cursor: pointer;
+  font-size: 50px;
+  position: absolute;
+  top: 80px;
+  right: 10px;
+}
+
+.pre-sticker {
+  width: 80px;
+  margin: 80px;
+  cursor: pointer;
+}
+
+#stickerModal {
+  background-image: url(assets/tabs/stickers-tab.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+#decorModal {
+  background-image: url(assets/tabs/decor-tab.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+#framesModal {
+  background-image: url(assets/tabs/frames-tab.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+#TabsBackground {
+  position: fixed;
+  right: 10%;
+  left: 10%;
+  bottom: 0;
+  width: 80%;
+  z-index: -1;
+}
+
+#StickersButton, #sbtn {
+  position: absolute;
+  bottom: 5.3%;
+  left: 2.5%;
+  width: 208px;
+  height: 75px;
+}
+
+#DecorButton, #dbtn {
+  position: absolute;
+  bottom: 5.3%;
+  left: 20.3%;
+  width: 208px;
+  height: 75px;
+}
+
+#FramesButton, #fbtn {
+  position: absolute;
+  bottom: 5.3%;
+  left: 37.6%;
+  width: 208px;
+  height: 75px;
+}
+
 #ItemsToolBar {
   display: flex;
   justify-content: center;
   gap: 10px;
   flex-wrap: wrap;
-  padding: 16px;
-  background-image: url(assets/tabs/tabs.png);
-  background-repeat: repeat-x;
-  /*stick toolbar to the bottom of the page*/
-    position: fixed;
-    bottom: 0;
-    left: 7%;
-    width: 80%;
+  position: fixed;
+  bottom: 5.3%;
+  left: 10%;
+  right: 10%;
+  transition: bottom 0.5s ease-out;
+}
+
+#ToolBar {
+  display: none;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  position: fixed;
+  bottom: 42.7%;
+  left: 10%;
+  right: 10%;
+  z-index: 101;
 }
