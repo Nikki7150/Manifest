@@ -178,3 +178,56 @@ canvas {
   right: 10%;
   z-index: 101;
 }
+
+.active {
+  background-color: rgb(230, 137, 182);
+  color: white;
+}
+
+#brushSize {
+    width: 120px;
+    cursor: pointer;
+    writing-mode: vertical-lr;
+    direction: rtl;
+    height: 150px;
+}
+
+#size {
+    min-width: 25px;
+    display: inline-block;
+    text-align: center;
+    font-weight: bold;
+}
+
+#toolbox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    border-radius: 12px;
+    float: right;
+    width: 40px;
+    position: absolute;
+    right: 280px;
+    top: 170px;
+}
+
+#color::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+#color::-webkit-color-swatch {
+    border: none;
+    border-radius: 50%;
+}
+
+#color {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 1px solid black;
+    border-radius: 50%;
+    cursor: pointer;
+}

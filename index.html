@@ -10,14 +10,24 @@
         <h1>Manifest</h1>
 
         <div id="CanvasToolBar">
-            <button id="AddTextButton">Add Text</button>
-            <button id="UploadImageButton">Upload</button>
-            <button id="DeleteObject">Delete</button>
-            <button id="DownloadBoard">Download</button>
-            <button id="ClearBoard">Clear Board</button>
+            <button id="AddTextButton" class="toolbar-btn">Add Text</button>
+            <button id="UploadImageButton" class="toolbar-btn">Upload</button>
+            <button id="DeleteObject" class="toolbar-btn">Delete</button>
+            <button id="DownloadBoard" class="toolbar-btn">Download</button>
+            <button id="ClearBoard" class="toolbar-btn">Clear Board</button>
             <input type="file" id="ImageUploadInput" accept="image/*" hidden />
-            <button id="BringForward">Bring Forward</button>
-            <button id="SendBackward">Send Backward</button>
+            <button id="BringForward" class="toolbar-btn">Bring Forward</button>
+            <button id="SendBackward" class="toolbar-btn">Send Backward</button>
+            <button id="DrawingMode">Drawing Mode</button>
+        </div>
+
+        <div id="drawingTools" class="hidden">
+            <div id="toolbox">
+                <input type="range" id="brushSize" min="1" max="50" value="1">
+                <span id="size">1</span>
+                <input type="color" id="color" />
+                <button id="clear">X</button>
+            </div>
         </div>
 
         <div id="BoardWrapper">
@@ -26,17 +36,17 @@
 
         <img src="assets/tabs/temp-tabs.jpeg" id="TabsBackground" alt="Tabs Background">
         <div id="ItemsToolBar">
-            <button id="StickersButton">Stickers</button>
-            <button id="DecorButton">Decor</button>
-            <button id="FramesButton">Frames</button>
+            <button id="StickersButton" class="toolbar-btn">Stickers</button>
+            <button id="DecorButton" class="toolbar-btn">Decor</button>
+            <button id="FramesButton" class="toolbar-btn">Frames</button>
         </div>
 
         <!-- Modals -->
         <div id="modals">
             <div id="ToolBar">
-                <button id="sbtn">Stickers</button>
-                <button id="dbtn">Decor</button>
-                <button id="fbtn">Frames</button>
+                <button id="sbtn" class="toolbar-btn">Stickers</button>
+                <button id="dbtn" class="toolbar-btn">Decor</button>
+                <button id="fbtn" class="toolbar-btn">Frames</button>
             </div>
             <div id="stickerModal" class="modal hidden">
                 <div class="modal-content">
@@ -66,6 +76,8 @@
                 </div>
             </div>
         </div>
+
+        
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
         <script src="app.js"></script>

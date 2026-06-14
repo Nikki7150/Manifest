@@ -1,12 +1,11 @@
-// initializing fabric canvas
+/*--------------------------------------------------------initializing fabric canvas---------------------------------------------------------*/
 const canvas = new fabric.Canvas('VisionBoard', {
   width: 1000,
   height: 600, 
   backgroundColor: '#b98b62'
 });
 
-// button functionality
-
+/*-----------------------------------------------------------BUTTON FUNCTIONALITY-----------------------------------------------------------*/
 // AddText button
 const addTextBtn = document.getElementById("AddTextButton");
 addTextBtn.addEventListener("click", () => {
@@ -112,7 +111,41 @@ sendBackwardBtn.addEventListener("click", () => {
     }
 });
 
+const toolbarButtons = document.querySelectorAll(".toolbar-btn");
+const drawingModeBtn = document.getElementById("DrawingMode");
+drawingModeBtn.addEventListener("click", () => {
+    canvas.isDrawingMode = !canvas.isDrawingMode;
+    document.getElementById("drawingTools").classList.toggle("hidden", !canvas.isDrawingMode);
 
+    if (canvas.isDrawingMode) {
+        drawingModeBtn.textContent = "✏️ Exit Drawing";
+        drawingModeBtn.classList.add("active");
+        alert("Drawing mode enabled. Turn it off to move objects.");
+        canvas.freeDrawingBrush.width = 1;
+        canvas.freeDrawingBrush.color = "#000000";
+        const showSize = document.getElementById("size");
+        showSize.textContent = canvas.freeDrawingBrush.width;
+
+        toolbarButtons.forEach(button => {
+            button.disabled = canvas.isDrawingMode;
+            button.style.cursor = canvas.isDrawingMode ? "not-allowed" : "pointer";
+        });
+
+    } else {
+        drawingModeBtn.textContent = "✏️ Draw";
+        drawingModeBtn.classList.remove("active");
+
+        // Re-enable toolbar buttons when exiting drawing mode
+        toolbarButtons.forEach(button => {
+            button.disabled = false;
+            button.style.cursor = "pointer";
+        });
+    }
+});
+
+
+/*-----------------------------------------------------------TOOLBAR FUNCTIONALITY-----------------------------------------------------------*/
+let activeModal = null;
 // ToolBar button handlers (for switching between tabs)
 const toolbarBtns = document.querySelectorAll('#ToolBar button');
 toolbarBtns.forEach(btn => {
@@ -142,6 +175,7 @@ toolbarBtns.forEach(btn => {
 });
 
 
+/*-----------------------------------------------------------MODAL FUNCTIONALITY-----------------------------------------------------------*/
 // sticker modal
 const stickerModalBtn = document.getElementById("StickersButton");
 const stickerModal = document.getElementById("stickerModal");
@@ -219,6 +253,7 @@ closeFrameBtn.addEventListener("click", () => {
     }, 500);
 });
 
+/*-----------------------------------------------------------ADDING CONTENT TO CANVAS-----------------------------------------------------------*/
 // Adding stickers to canvas
 const stickers = document.querySelectorAll(".pre-sticker");
 stickers.forEach(sticker => {
@@ -236,4 +271,38 @@ stickers.forEach(sticker => {
             canvas.renderAll();
         });
     });
+});
+
+/*-----------------------------------------------------------DRAWING TOOLS-----------------------------------------------------------*/ 
+const colorPicker = document.getElementById("color");
+colorPicker.addEventListener("change", (e) => {
+    canvas.freeDrawingBrush.color = e.target.value;
+});
+
+const showSize = document.getElementById("size");
+showSize.textContent = canvas.freeDrawingBrush.width;
+
+const brushSizeSlider = document.getElementById("brushSize");
+
+canvas.freeDrawingBrush.width = 1;
+showSize.textContent = 1;
+
+brushSizeSlider.addEventListener("input", (e) => {
+    const size = Number(e.target.value);
+
+    canvas.freeDrawingBrush.width = size;
+    showSize.textContent = size;
+});
+
+const clearDrawingBtn = document.getElementById("clear");
+clearDrawingBtn.addEventListener("click", () => {
+    if (confirm("Are you sure you want to clear all drawings? This action cannot be undone.")) {
+        const objects = canvas.getObjects();
+        objects.forEach(obj => {
+            if (obj.type === "path") {
+                canvas.remove(obj);
+            }
+        });
+        canvas.renderAll();
+    }
 });
