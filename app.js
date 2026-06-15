@@ -5,6 +5,42 @@ const canvas = new fabric.Canvas('VisionBoard', {
   backgroundColor: '#b98b62'
 });
 
+/*-----------------------------------------------------------MAINTAINING ASPECT RATIO ON RESIZE-----------------------------------------------------------*/
+function resizeCanvas() {
+    const wrapper = document.getElementById('BoardWrapper');
+    const wrapperWidth = wrapper.clientWidth;
+    const wrapperHeight = wrapper.clientHeight;
+
+    const aspectRatio = canvas.width / canvas.height;
+    let newWidth, newHeight;
+
+    if (wrapperWidth / wrapperHeight > aspectRatio) {
+        newHeight = wrapperHeight;
+        newWidth = newHeight * aspectRatio;
+    } else {
+        newWidth = wrapperWidth;
+        newHeight = newWidth / aspectRatio;
+    }
+
+    canvas.setDimensions({ width: newWidth, height: newHeight });
+    canvas.setZoom(newWidth / 1000); // Assuming original width is 1000
+}
+
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas(); // Initial call to set the canvas size
+
+/*-----------------------------------------------------------BASE FUNCTIONS-----------------------------------------------------------*/
+function saveBoard() {
+    const autoSaveLabel = document.getElementById("AutoSave");
+    autoSaveLabel.textContent = "Saving...";
+    
+    const boardData = JSON.stringify(canvas.toJSON());
+    localStorage.setItem("manifest-board", boardData);
+    setTimeout(() => {
+        autoSaveLabel.textContent = "Saved";
+    }, 1000);
+}
+
 /*-----------------------------------------------------------BUTTON FUNCTIONALITY-----------------------------------------------------------*/
 // AddText button
 const addTextBtn = document.getElementById("AddTextButton");
@@ -87,6 +123,8 @@ clearBoardBtn.addEventListener("click", () => {
         canvas.clear();
         canvas.setBackgroundColor('#b98b62', canvas.renderAll.bind(canvas));
     }
+
+    localStorage.removeItem("manifest-board");
 });
 
 // BringForward button
@@ -111,6 +149,7 @@ sendBackwardBtn.addEventListener("click", () => {
     }
 });
 
+// DrawingMode button
 const toolbarButtons = document.querySelectorAll(".toolbar-btn");
 const drawingModeBtn = document.getElementById("DrawingMode");
 drawingModeBtn.addEventListener("click", () => {
@@ -142,6 +181,47 @@ drawingModeBtn.addEventListener("click", () => {
         });
     }
 });
+
+// SaveBoard button
+const saveBoardBtn = document.getElementById("SaveBoard");
+
+saveBoardBtn.addEventListener("click", () => {
+    saveBoard();
+    alert("Vision board saved successfully!");
+});
+
+// LoadBoard button
+const loadBoardBtn = document.getElementById("LoadBoard");
+
+loadBoardBtn.addEventListener("click", () => {
+    const savedBoard = localStorage.getItem("manifest-board");
+
+    if (!savedBoard) {
+        alert("No saved board found.");
+        return;
+    }
+
+    canvas.loadFromJSON(savedBoard, () => {
+        canvas.renderAll();
+    });
+
+    alert("Vision board loaded successfully!");
+});
+
+// automatically load saved board on page load
+window.addEventListener("load", () => {
+    const savedBoard = localStorage.getItem("manifest-board");
+    if (savedBoard) {
+        canvas.loadFromJSON(savedBoard, () => {
+            canvas.renderAll();
+        });
+    }
+});
+
+// automatically save board every time something changes
+canvas.on("object:added", saveBoard);
+canvas.on("object:modified", saveBoard);
+canvas.on("object:removed", saveBoard);
 
 
 /*-----------------------------------------------------------TOOLBAR FUNCTIONALITY-----------------------------------------------------------*/
