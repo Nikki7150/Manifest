@@ -5,9 +5,26 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Manifest</title>
         <link rel="stylesheet" href="style.css">
+        <!-- Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Bebas+Neue&family=Caveat&family=Caveat+Brush&family=Dancing+Script&family=Gochi+Hand&family=Indie+Flower&family=Inter&family=Kalam&family=Lora&family=Merriweather&family=Montserrat&family=Pacifico&family=Permanent+Marker&family=Playfair+Display&family=Playpen+Sans&family=Poppins&family=Shadows+Into+Light&display=swap" rel="stylesheet">
     </head>
     <body>
         <h1>Manifest</h1>
+
+        <!-- Text edit modal -->
+        <div id="textEditBox" class="hidden">
+            <h3>Fonts:</h3>
+            <div class="content">
+                <div id="fontList"></div>
+                <div id="fontColor">
+                    <label for="fontColor" id="colorLabel">Color:</label>
+                    <input type="color" id="f-color" value="#000000">
+                </div>
+            </div>
+
+        </div>
 
         <div id="CanvasToolBar">
             <button id="AddTextButton" class="toolbar-btn">Add Text</button>
@@ -20,7 +37,6 @@
             <button id="SendBackward" class="toolbar-btn">Send Backward</button>
             <button id="DrawingMode">Drawing Mode</button>
             <button id="SaveBoard" class="toolbar-btn">Save Board</button>
-            <button id="LoadBoard" class="toolbar-btn">Load Board</button>
         </div>
 
         <div id="drawingTools" class="hidden">
@@ -32,8 +48,9 @@
             </div>
         </div>
 
+        
         <div id="BoardWrapper">
-            <label id="AutoSave">Saved</label>
+            <h4 id="AutoSave">Saved</h4>
             <canvas id="VisionBoard"></canvas>
         </div>
 
@@ -81,6 +98,15 @@
         </div>
 
         
+
+        <!-- Image edit modal -->
+        <div id="imageEditModal" class="modal hidden">
+            <div class="modal-content">
+                <span id="closeImageEdit" class="close">&times;</span>
+                <img id="imageEdit" src="" alt="Edit Image">
+                <button id="saveImage">Save</button>
+            </div>
+        </div>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
         <script src="app.js"></script>

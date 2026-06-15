@@ -5,6 +5,24 @@ const canvas = new fabric.Canvas('VisionBoard', {
   backgroundColor: '#b98b62'
 });
 
+fabric.Text.prototype._setTextStyles = function(ctx, style, forMeasuring) {
+    ctx.textBaseline = "alphabetic";
+    if (this.path) {
+        switch (this.pathAlign) {
+            case "center":
+                ctx.textBaseline = "middle";
+                break;
+            case "ascender":
+                ctx.textBaseline = "top";
+                break;
+            case "descender":
+                ctx.textBaseline = "bottom";
+                break;
+        }
+    }
+    ctx.font = this._getFontDeclaration(style, forMeasuring);
+};
+
 /*-----------------------------------------------------------MAINTAINING ASPECT RATIO ON RESIZE-----------------------------------------------------------*/
 function resizeCanvas() {
     const wrapper = document.getElementById('BoardWrapper');
@@ -190,24 +208,6 @@ saveBoardBtn.addEventListener("click", () => {
     alert("Vision board saved successfully!");
 });
 
-// LoadBoard button
-const loadBoardBtn = document.getElementById("LoadBoard");
-
-loadBoardBtn.addEventListener("click", () => {
-    const savedBoard = localStorage.getItem("manifest-board");
-
-    if (!savedBoard) {
-        alert("No saved board found.");
-        return;
-    }
-
-    canvas.loadFromJSON(savedBoard, () => {
-        canvas.renderAll();
-    });
-
-    alert("Vision board loaded successfully!");
-});
-
 // automatically load saved board on page load
 window.addEventListener("load", () => {
     const savedBoard = localStorage.getItem("manifest-board");
@@ -386,3 +386,80 @@ clearDrawingBtn.addEventListener("click", () => {
         canvas.renderAll();
     }
 });
+
+/*-----------------------------------------------------------TEXT EDITING-----------------------------------------------------------*/
+const fonts = [
+    "Poppins",
+    "Inter",
+    "Montserrat",
+    "Playfair Display",
+    "Merriweather",
+    "Lora",
+    "Pacifico",
+    "Dancing Script",
+    "Bebas Neue",
+    "Architects Daughter", "Caveat", "Caveat Brush", "Dancing Script",
+  "Gochi Hand", "Indie Flower", "Kalam", "Permanent Marker",
+  "Playpen Sans", "Shadows Into Light"
+];
+
+const fontList = document.getElementById("fontList");
+
+fonts.forEach(font => {
+
+    const button = document.createElement("button");
+
+    button.textContent = font;
+    button.classList.add("font-button");
+    button.style.fontFamily = font;
+
+    fontList.appendChild(button);
+
+    button.addEventListener("click", () => {
+        const activeObject = canvas.getActiveObject();
+
+        if (activeObject && activeObject.type === "textbox") {
+            activeObject.set({fontFamily: font});
+            canvas.renderAll();
+            saveBoard();
+        }
+    });
+
+});
+
+// text color change
+const color = document.getElementById("f-color");
+color.addEventListener("input", (e) => {
+    const activeObject = canvas.getActiveObject();
+    if (activeObject && activeObject.type === "textbox") {
+        activeObject.set({
+            fill: e.target.value
+        });
+        canvas.renderAll();
+        saveBoard();
+    }
+});
+
+// when a textbox is selected, open the text edit modal
+canvas.on("selection:created", () => {
+    const selectedObject = canvas.getActiveObject();
+
+    if (selectedObject && selectedObject.type === "textbox") {
+        document.getElementById("textEditBox").style.display = "block";
+    }
+});
+
+canvas.on("selection:updated", () => {
+    const selectedObject = canvas.getActiveObject();
+
+    if (selectedObject && selectedObject.type === "textbox") {
+        document.getElementById("textEditBox").style.display = "block";
+    } else {
+        document.getElementById("textEditBox").style.display = "none";
+    }
+});
+
+canvas.on("selection:cleared", () => {
+    document.getElementById("textEditBox").style.display = "none";
+});
+
