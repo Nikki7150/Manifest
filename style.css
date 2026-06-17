@@ -241,7 +241,7 @@ canvas {
     cursor: pointer;
 }
 
-#textEditBox {
+#textEditBox, #imageEditBox {
     background-color: rgba(255, 255, 255, 0.9);
     padding: 20px;
     border-radius: 12px;
@@ -310,3 +310,84 @@ canvas {
     border-radius: 50%;
     cursor: pointer;
 }
+
+
+:root {
+    --switch-width: 3.5em;
+    --switch-height: 2em;
+    --icon-size: 1.4em;
+    --slider-offset: 0.3em;
+}
+
+.switch input{
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+
+.switch {
+  display: block;
+  position: relative;
+  width: var(--switch-width);
+  height: var(--switch-height);
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #d1b6b6;
+  border-radius: 30px;
+  transition: 0.4s;
+}
+
+.slider::before {
+  position: absolute;
+  content: "";
+  height: var(--icon-size, 1.4em);
+  width: var(--icon-size, 1.4em);
+  border-radius: 20px;
+  left: var(--slider-offset, 0.3em);
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: white;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: rgb(230, 185, 207);
+}
+
+input:checked + .slider::before {
+  left: calc(100% - var(--icon-size, 1.4em) - var(--slider-offset, 0.3em));
+  background-color: rgb(143, 84, 84);
+}
+
+label {
+    font-weight: bold;
+    color: rgb(143, 84, 84);
+    float: right;
+}
+
+.filter-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 50px;
+    margin-top: 20px;
+}
+
+#resetFilters {
+  background-color: transparent;
+  color: rgb(188, 85, 135);
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 1px solid rgb(188, 85, 135);
+  margin-left: 30%;
+}
+

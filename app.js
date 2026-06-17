@@ -52,11 +52,108 @@ function saveBoard() {
     const autoSaveLabel = document.getElementById("AutoSave");
     autoSaveLabel.textContent = "Saving...";
     
-    const boardData = JSON.stringify(canvas.toJSON());
+    const boardData = JSON.stringify(canvas.toJSON(['customFilters']));
     localStorage.setItem("manifest-board", boardData);
     setTimeout(() => {
         autoSaveLabel.textContent = "Saved";
     }, 1000);
+}
+
+function applyFilters(img) {
+
+    const filters = [];
+
+    filters.push(
+        new fabric.Image.filters.Brightness({
+            brightness: img.customFilters.brightness
+        })
+    );
+
+    filters.push(
+        new fabric.Image.filters.Contrast({
+            contrast: img.customFilters.contrast
+        })
+    );
+
+    filters.push(
+        new fabric.Image.filters.Saturation({
+            saturation: img.customFilters.saturation
+        })
+    );
+
+    filters.push(
+        new fabric.Image.filters.Blur({
+            blur: img.customFilters.blur
+        })
+    );
+
+    if (img.customFilters.grayscale) {
+        filters.push(
+            new fabric.Image.filters.Grayscale()
+        );
+    }
+
+    if (img.customFilters.sepia) {
+        filters.push(
+            new fabric.Image.filters.Sepia()
+        );
+    }
+
+    if (img.customFilters.invert) {
+        filters.push(
+            new fabric.Image.filters.Invert()
+        );
+    }
+
+    img.filters = filters;
+
+    img.applyFilters();
+    canvas.renderAll();
+    saveBoard();
+}
+
+function initializeFilters(img) {
+
+    if (!img.customFilters) {
+
+        img.customFilters = {
+
+            brightness: 0,
+            contrast: 0,
+            saturation: 0,
+            blur: 0,
+
+            grayscale: false,
+            sepia: false,
+            invert: false
+
+        };
+
+    }
+
+}
+
+function updateImageEditorUI(img) {
+    brightnessSlider.value =
+        img.customFilters?.brightness ?? 0;
+
+    contrastSlider.value =
+        img.customFilters?.contrast ?? 0;
+
+    saturationSlider.value =
+        img.customFilters?.saturation ?? 0;
+
+    blurSlider.value =
+        img.customFilters?.blur ?? 0;
+
+    grayscaleBtn.checked =
+        img.customFilters.grayscale;
+
+    sepiaBtn.checked =
+        img.customFilters.sepia;
+
+    invertBtn.checked = 
+        img.customFilters.invert;
 }
 
 /*-----------------------------------------------------------BUTTON FUNCTIONALITY-----------------------------------------------------------*/
@@ -88,6 +185,17 @@ imageInput.addEventListener("change", (event) => {
     const reader = new FileReader();
     reader.onload = (e) => {
         fabric.Image.fromURL(e.target.result, (img) => {
+            img.customFilters = {
+                brightness: 0,
+                contrast: 0,
+                saturation: 0,
+
+                grayscale: false,
+                sepia: false,
+                invert: false,
+
+                blur: 0
+            };
             const maxWidth = 300;
             const maxHeight = 300;
 
@@ -99,6 +207,7 @@ imageInput.addEventListener("change", (event) => {
                 scaleX: scale,
                 scaleY: scale
             });
+
             canvas.add(img);
             canvas.setActiveObject(img);
             canvas.renderAll();
@@ -213,6 +322,28 @@ window.addEventListener("load", () => {
     const savedBoard = localStorage.getItem("manifest-board");
     if (savedBoard) {
         canvas.loadFromJSON(savedBoard, () => {
+            canvas.getObjects().forEach(obj => {
+
+                if (obj.type === "image") {
+
+                    if (!obj.customFilters) {
+
+                        obj.customFilters = {
+                            brightness: 0,
+                            contrast: 0,
+                            saturation: 0,
+                            blur: 0,
+                            grayscale: false,
+                            sepia: false,
+                            invert: false
+                        };
+
+                    }
+
+                    applyFilters(obj);
+                }
+
+            });
             canvas.renderAll();
         });
     }
@@ -294,8 +425,10 @@ decorModalBtn.addEventListener("click", () => {
     decorModal.classList.add("slideUp");
     decorModal.style.display = "block";
     decorModal.style.height = "50%";
-    toolbar.style.zIndex = "101";
-    toolbar.style.display = "flex";
+    setTimeout(() => {
+        toolbar.style.display = "flex";
+        toolbar.style.zIndex = "101";
+    }, 500);
 });
 
 closeDecorBtn.addEventListener("click", () => {
@@ -319,8 +452,10 @@ frameModalBtn.addEventListener("click", () => {
     frameModal.classList.add("slideUp");
     frameModal.style.display = "block";
     frameModal.style.height = "50%";
-    toolbar.style.display = "flex";
-    toolbar.style.zIndex = "101";
+    setTimeout(() => {
+        toolbar.style.display = "flex";
+        toolbar.style.zIndex = "101";
+    }, 500);
 });
 
 closeFrameBtn.addEventListener("click", () => {
@@ -333,6 +468,20 @@ closeFrameBtn.addEventListener("click", () => {
     }, 500);
 });
 
+/*when clicking outside the modal, close it*/
+window.addEventListener("click", (e) => {
+    if (activeModal && !activeModal.contains(e.target) && !e.target.classList.contains("toolbar-btn")) {
+        activeModal.classList.remove("slideUp");
+        activeModal.classList.add("slideDown");
+        toolbar.style.display = "none";
+        setTimeout(() => {
+            activeModal.style.display = "none";
+            activeModal.classList.remove("slideDown");
+            activeModal = null;
+        }, 500);
+    }
+});
+
 /*-----------------------------------------------------------ADDING CONTENT TO CANVAS-----------------------------------------------------------*/
 // Adding stickers to canvas
 const stickers = document.querySelectorAll(".pre-sticker");
@@ -340,6 +489,7 @@ stickers.forEach(sticker => {
     sticker.addEventListener("click", () => {
         const src = sticker.getAttribute("src");
         fabric.Image.fromURL(src, (img) => {
+            initializeFilters(img);
             img.set({
                 left: 150,
                 top: 150,
@@ -463,3 +613,136 @@ canvas.on("selection:cleared", () => {
     document.getElementById("textEditBox").style.display = "none";
 });
 
+/*-----------------------------------------------------------IMAGE EDITING-----------------------------------------------------------*/
+// when a image is selected, open the image edit modal
+canvas.on("selection:created", () => {
+    const selectedObject =
+        canvas.getActiveObject();
+
+    if (selectedObject && selectedObject.type === "image") {
+        initializeFilters(selectedObject);
+        document.getElementById("imageEditBox").style.display = "block";
+        updateImageEditorUI(selectedObject);
+    }
+});
+
+canvas.on("selection:updated", () => {
+    const selectedObject = canvas.getActiveObject();
+
+    if (selectedObject && selectedObject.type === "image") {
+        initializeFilters(selectedObject);
+        document.getElementById("imageEditBox").style.display = "block";
+        updateImageEditorUI(selectedObject);
+    }
+});
+
+canvas.on("selection:cleared", () => {
+    document.getElementById("imageEditBox").style.display = "none";
+});
+
+// brightness change
+const brightnessSlider =document.getElementById("brightness");
+brightnessSlider.addEventListener("input", () => {
+
+    const img = canvas.getActiveObject();
+
+    if (!img || img.type !== "image") return;
+
+    img.customFilters.brightness = parseFloat(brightnessSlider.value);
+
+    applyFilters(img);
+
+});
+
+// contrast change
+const contrastSlider = document.getElementById("contrast");
+contrastSlider.addEventListener("input", () => {
+
+    const img = canvas.getActiveObject();
+
+    if (!img || img.type !== "image") return;
+
+    img.customFilters.contrast =  parseFloat(contrastSlider.value);
+
+    applyFilters(img);
+
+});
+
+// saturation change
+const saturationSlider = document.getElementById("saturation");
+saturationSlider.addEventListener("input", () => {
+
+    const img = canvas.getActiveObject();
+
+    if (!img || img.type !== "image") return;
+
+    img.customFilters.saturation = parseFloat(saturationSlider.value);
+
+    applyFilters(img);
+
+});
+
+// grayscale toggle
+const grayscaleBtn = document.getElementById("grayScale");
+
+grayscaleBtn.addEventListener("change", () => {
+    const img = canvas.getActiveObject();
+    if (!img || img.type !== "image") return;
+    initializeFilters(img);
+
+    img.customFilters.grayscale = !img.customFilters.grayscale;
+    grayscaleBtn.checked = img.customFilters.grayscale;
+    applyFilters(img);
+});
+
+// blur scale
+const blurSlider = document.getElementById("blur");
+blurSlider.addEventListener("input", () => {
+    const img = canvas.getActiveObject();
+    if (!img || img.type !== "image") return;
+
+    img.customFilters.blur = parseFloat(blurSlider.value);
+    applyFilters(img);
+});
+
+// sepia toggle
+const sepiaBtn =document.getElementById("sepia");
+sepiaBtn.addEventListener("change", () => {
+    const img = canvas.getActiveObject();
+    if (!img || img.type !== "image") return;
+    initializeFilters(img);
+
+    img.customFilters.sepia = !img.customFilters.sepia;
+    sepiaBtn.checked = img.customFilters.sepia;
+    applyFilters(img);
+});
+
+// invert toggle
+const invertBtn =document.getElementById("invert");
+invertBtn.addEventListener("change", () => {
+    const img = canvas.getActiveObject();
+    if (!img || img.type !== "image")return;
+
+    img.customFilters.invert = !img.customFilters.invert;
+    invertBtn.checked = img.customFilters.invert;
+    applyFilters(img);
+});
+
+// reset filters button
+const resetFiltersBtn =
+document.getElementById("resetFilters");
+
+resetFiltersBtn.addEventListener("click", () => {
+    const img = canvas.getActiveObject();
+    initializeFilters(img);
+    brightnessSlider.value = 0;
+    contrastSlider.value = 0;
+    saturationSlider.value = 0;
+    blurSlider.value = 0;
+
+    grayscaleBtn.checked = false;
+    sepiaBtn.checked = false;
+    invertBtn.checked = false;
+
+    applyFilters(img);
+});

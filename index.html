@@ -23,8 +23,57 @@
                     <input type="color" id="f-color" value="#000000">
                 </div>
             </div>
-
         </div>
+
+        <!-- Image edit modal -->
+        <div id="imageEditBox" class="hidden">
+            <div class="content">
+                <div class="filter-option">
+                    <label for="brightness">Brightness:</label>
+                    <input type="range" id="brightness" min="-1" max="1" step="0.1" value="0">
+                </div>
+                <div class="filter-option">
+                    <label for="contrast">Contrast:</label>
+                    <input type="range" id="contrast" min="-1" max="1" step="0.1" value="0">
+                </div>
+                <div class="filter-option">
+                    <label for="saturation">Saturation:</label>
+                    <input type="range" id="saturation" min="-1" max="1" step="0.1" value="0">
+                </div>
+                <div class="filter-option">
+                    <label for="blur">Blur:</label>
+                    <input type="range" id="blur" min="0" max="10" step="0.1" value="0">
+                </div>
+                <div class="f-options">
+                    <div class="filter-option">
+                        <label for="grayScale">Grayscale</label>
+                        <label class="switch">
+                            <input type="checkbox" id="grayScale"/>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="filter-option">
+                        <label for="sepia">Sepia</label>
+                        <label class="switch">
+                            <input type="checkbox" id="sepia"/>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="filter-option">
+                        <label for="invert">Invert</label>
+                        <label class="switch">
+                            <input type="checkbox" id="invert"/>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="filter-option">
+                    <button id="resetFilters">Reset</button>
+                </div>
+            </div>
+        </div>
+
+        
 
         <div id="CanvasToolBar">
             <button id="AddTextButton" class="toolbar-btn">Add Text</button>
@@ -94,17 +143,6 @@
                         <img src="assets/frames/headphones.png" class="pre-sticker" alt="Frame 1">
                     </div>
                 </div>
-            </div>
-        </div>
-
-        
-
-        <!-- Image edit modal -->
-        <div id="imageEditModal" class="modal hidden">
-            <div class="modal-content">
-                <span id="closeImageEdit" class="close">&times;</span>
-                <img id="imageEdit" src="" alt="Edit Image">
-                <button id="saveImage">Save</button>
             </div>
         </div>
 
