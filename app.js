@@ -424,22 +424,11 @@ window.addEventListener("load", () => {
     if (savedBoard) {
         canvas.loadFromJSON(savedBoard, () => {
             canvas.getObjects().forEach(obj => {
-
                 if (obj.type === "image") {
-
-                    
-                    if (obj.type === "image") {
-
-                        initializeFilters(obj);
-
-                        applyFilters(obj);
-
-                        obj.dirty = true;
-                    }
+                    initializeFilters(obj);
                     applyFilters(obj);
-                    console.log(obj.filters);
+                    obj.dirty = true;
                 }
-
             });
             canvas.renderAll();
         });
@@ -458,6 +447,10 @@ duplicateObjectBtn.addEventListener("click", () => {
     const activeObject = canvas.getActiveObject();
     if (activeObject) {
         activeObject.clone((cloned) => {
+            if (activeObject.customFilters) {
+                cloned.customFilters = JSON.parse(JSON.stringify(activeObject.customFilters));
+                applyFilters(cloned);
+            }
             cloned.set({
                 left: activeObject.left + 20,
                 top: activeObject.top + 20
@@ -479,6 +472,10 @@ document.addEventListener("keydown", (e) => {
         const activeObject = canvas.getActiveObject();
         if (activeObject) {
             activeObject.clone((cloned) => {
+                if (activeObject.customFilters) {
+                    cloned.customFilters = JSON.parse(JSON.stringify(activeObject.customFilters));
+                    applyFilters(cloned);
+                }
                 clipboard = cloned;
             });
         }
@@ -487,6 +484,10 @@ document.addEventListener("keydown", (e) => {
     if (e.metaKey && e.key === "v" || (e.ctrlKey && e.key === "v")) {
         if (clipboard) {
             clipboard.clone((cloned) => {
+                if (clipboard.customFilters) {
+                    cloned.customFilters = JSON.parse(JSON.stringify(clipboard.customFilters));
+                    applyFilters(cloned);
+                }
                 cloned.set({
                     left: cloned.left + 20,
                     top: cloned.top + 20
@@ -891,6 +892,17 @@ resetFiltersBtn.addEventListener("click", () => {
     grayscaleBtn.checked = false;
     sepiaBtn.checked = false;
     invertBtn.checked = false;
+
+    img.customFilters = {
+        brightness: 0,
+        contrast: 0,
+        saturation: 0,
+        blur: 0,
+
+        grayscale: false,
+        sepia: false,
+        invert: false
+    };
 
     applyFilters(img);
 });
