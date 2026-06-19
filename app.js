@@ -5,6 +5,74 @@ const canvas = new fabric.Canvas('VisionBoard', {
   backgroundColor: '#b98b62'
 });
 
+/*-----------------------------------------------------------UNDO/REDO-----------------------------------------------------------*/
+let undoStack = [];
+let redoStack = [];
+let isRestoring = false;
+
+function saveState() {
+    if (isRestoring) return;
+
+    const json = JSON.stringify(
+        canvas.toJSON(['customFilters'])
+    );
+
+    undoStack.push(json);
+
+    redoStack = [];
+}
+
+canvas.on("object:added", saveState);
+canvas.on("object:modified", saveState);
+canvas.on("object:removed", saveState);
+
+const undoBtn = document.getElementById("Undo");
+undoBtn.addEventListener("click", undo);
+
+// when cmd + z is pressed, copy the active object, and when cmd + y is pressed, paste the copied object
+document.addEventListener("keydown", (e) => {
+    if (e.metaKey && e.key === "z" || (e.ctrlKey && e.key === "z")) {undo();}
+
+    if (e.metaKey && e.key === "y" || (e.ctrlKey && e.key === "y")) {redo();}
+});
+
+const redoBtn = document.getElementById("Redo");
+redoBtn.addEventListener("click", redo);
+
+function undo() {
+    if (undoStack.length <= 1)
+        return;
+
+    const currentState = undoStack.pop();
+
+    redoStack.push(currentState);
+
+    const previousState = undoStack[undoStack.length - 1];
+
+    isRestoring = true;
+    canvas.loadFromJSON(previousState, () => {
+        canvas.renderAll();
+        isRestoring = false;
+    });
+}
+
+function redo() {
+    if (redoStack.length === 0)
+        return;
+
+    const nextState = redoStack.pop();
+
+    undoStack.push(nextState);
+
+    isRestoring = true;
+    canvas.loadFromJSON(nextState, () => {
+        canvas.renderAll();
+        isRestoring = false;
+    });
+}
+
+saveState(); // Save initial state
+
 fabric.Text.prototype._setTextStyles = function(ctx, style, forMeasuring) {
     ctx.textBaseline = "alphabetic";
     if (this.path) {
@@ -228,6 +296,17 @@ deleteObjectBtn.addEventListener("click", () => {
     }
 });
 
+// when delete key is pressed, delete the active object
+document.addEventListener("keydown", (e) => {
+    if (e.key === "Delete" || e.key === "Backspace") {
+        const activeObject = canvas.getActiveObject();
+        if (activeObject) {
+            canvas.remove(activeObject);
+            canvas.renderAll();
+        }
+    }
+});
+
 // DownloadBoard button 
 const downloadBoardBtn = document.getElementById("DownloadBoard");
 
@@ -265,6 +344,17 @@ bringForwardBtn.addEventListener("click", () => {
     }
 });
 
+// when up arrow key is pressed, bring the active object forward
+document.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowUp") {
+        const activeObject = canvas.getActiveObject();
+        if (activeObject) {
+            activeObject.bringForward();
+            canvas.renderAll();
+        }
+    }
+});
+
 // SendBackward button
 const sendBackwardBtn = document.getElementById("SendBackward");
 
@@ -273,6 +363,17 @@ sendBackwardBtn.addEventListener("click", () => {
     if (activeObject) {
         activeObject.sendBackwards();
         canvas.renderAll();
+    }
+});
+
+// when down arrow key is pressed, send the active object backward
+document.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowDown") {
+        const activeObject = canvas.getActiveObject();
+        if (activeObject) {
+            activeObject.sendBackwards();
+            canvas.renderAll();
+        }
     }
 });
 
@@ -326,21 +427,17 @@ window.addEventListener("load", () => {
 
                 if (obj.type === "image") {
 
-                    if (!obj.customFilters) {
+                    
+                    if (obj.type === "image") {
 
-                        obj.customFilters = {
-                            brightness: 0,
-                            contrast: 0,
-                            saturation: 0,
-                            blur: 0,
-                            grayscale: false,
-                            sepia: false,
-                            invert: false
-                        };
+                        initializeFilters(obj);
 
+                        applyFilters(obj);
+
+                        obj.dirty = true;
                     }
-
                     applyFilters(obj);
+                    console.log(obj.filters);
                 }
 
             });
@@ -353,6 +450,55 @@ window.addEventListener("load", () => {
 canvas.on("object:added", saveBoard);
 canvas.on("object:modified", saveBoard);
 canvas.on("object:removed", saveBoard);
+
+// DuplicateObject button
+const duplicateObjectBtn = document.getElementById("Duplicate");
+
+duplicateObjectBtn.addEventListener("click", () => {
+    const activeObject = canvas.getActiveObject();
+    if (activeObject) {
+        activeObject.clone((cloned) => {
+            cloned.set({
+                left: activeObject.left + 20,
+                top: activeObject.top + 20
+            });
+            canvas.add(cloned);
+            canvas.setActiveObject(cloned);
+            canvas.renderAll();
+            saveBoard();
+        });
+    }
+});
+
+// when cmd + c is pressed, copy the active object, and when cmd + v is pressed, paste the copied object
+let clipboard = null;
+// change ctrl to metaKey for MacOS
+document.addEventListener("keydown", (e) => {
+    if (e.metaKey && e.key === "c" || (e.ctrlKey && e.key === "c")
+    ) {
+        const activeObject = canvas.getActiveObject();
+        if (activeObject) {
+            activeObject.clone((cloned) => {
+                clipboard = cloned;
+            });
+        }
+    }
+
+    if (e.metaKey && e.key === "v" || (e.ctrlKey && e.key === "v")) {
+        if (clipboard) {
+            clipboard.clone((cloned) => {
+                cloned.set({
+                    left: cloned.left + 20,
+                    top: cloned.top + 20
+                });
+                canvas.add(cloned);
+                canvas.setActiveObject(cloned);
+                canvas.renderAll();
+                saveBoard();
+            });
+        }
+    }
+});
 
 
 /*-----------------------------------------------------------TOOLBAR FUNCTIONALITY-----------------------------------------------------------*/
@@ -633,6 +779,8 @@ canvas.on("selection:updated", () => {
         initializeFilters(selectedObject);
         document.getElementById("imageEditBox").style.display = "block";
         updateImageEditorUI(selectedObject);
+    } else {
+        document.getElementById("imageEditBox").style.display = "none";
     }
 });
 
@@ -746,3 +894,4 @@ resetFiltersBtn.addEventListener("click", () => {
 
     applyFilters(img);
 });
+

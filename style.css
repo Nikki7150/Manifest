@@ -30,7 +30,6 @@ button {
 #BoardWrapper {
   display: flex;
   justify-content: center;
-  padding: 20px;
 }
 
 canvas {
@@ -219,8 +218,8 @@ canvas {
     float: right;
     width: 40px;
     position: absolute;
-    right: 280px;
-    top: 170px;
+    right: 15%;
+    top: 20%;
 }
 
 #color::-webkit-color-swatch-wrapper {
@@ -263,7 +262,7 @@ canvas {
     flex-direction: column;
     gap: 8px;
     height: 530px;
-    overflow-y: auto;
+    overflow-y: scroll;
     padding: 10px;
 
     button {
@@ -280,6 +279,24 @@ canvas {
         background: rgb(230, 185, 207);
         color: white;
     }
+}
+
+#fontList::-webkit-scrollbar {
+    width: 10px;
+}
+
+#fontList::-webkit-scrollbar-track {
+    background: #f6eef3;
+    border-radius: 8px;
+}
+
+#fontList::-webkit-scrollbar-thumb {
+    background: rgb(230, 137, 182);
+    border-radius: 8px;
+}
+
+#fontList::-webkit-scrollbar-thumb:hover {
+    background: rgb(188, 85, 135);
 }
 
 #fontColor {
