@@ -1,8 +1,81 @@
 /*--------------------------------------------------------initializing fabric canvas---------------------------------------------------------*/
+const BASE_CANVAS_WIDTH = 1000;
+const BASE_CANVAS_HEIGHT = 600;
+let currentBackground = 'assets/backgrounds/cork-board.jpg';
+
 const canvas = new fabric.Canvas('VisionBoard', {
-  width: 1000,
-  height: 600, 
-  backgroundColor: '#b98b62'
+  width: BASE_CANVAS_WIDTH,
+  height: BASE_CANVAS_HEIGHT
+});
+
+function setCanvasBackgroundImage(imagePath = currentBackground, callback = () => canvas.renderAll()) {
+    fabric.Image.fromURL(imagePath, (img) => {
+        img.set({
+            originX: 'left',
+            originY: 'top',
+            scaleX: BASE_CANVAS_WIDTH / img.width,
+            scaleY: BASE_CANVAS_HEIGHT / img.height
+        });
+
+        canvas.setBackgroundImage(img, callback);
+    });
+}
+
+setCanvasBackgroundImage(currentBackground);
+
+fabric.Object.prototype.cornerStyle = "circle";
+
+fabric.Object.prototype.cornerColor = "#f8b4d9";
+
+fabric.Object.prototype.cornerStrokeColor = "#ffffff";
+
+fabric.Object.prototype.cornerSize = 12;
+
+fabric.Object.prototype.transparentCorners = false;
+
+fabric.Object.prototype.borderColor = "#f8b4d9";
+
+canvas.on("selection:created", () => {
+
+    const obj = canvas.getActiveObject();
+
+    if (!obj) return;
+
+    obj.shadow = new fabric.Shadow({
+        color: "rgba(251, 0, 38, 0.5)",
+        blur: 15
+    });
+
+    canvas.renderAll();
+
+});
+
+canvas.on("selection:updated", () => {
+    canvas.getObjects().forEach(obj => {
+        obj.shadow = null;
+    });
+
+    const obj = canvas.getActiveObject();
+
+    if (!obj) return;
+
+    obj.shadow = new fabric.Shadow({
+        color: "rgba(251, 0, 38, 0.5)",
+        blur: 15
+    });
+
+    canvas.renderAll();
+
+});
+
+canvas.on("selection:cleared", () => {
+
+    canvas.getObjects().forEach(obj => {
+        obj.shadow = null;
+    });
+
+    canvas.renderAll();
+
 });
 
 /*-----------------------------------------------------------UNDO/REDO-----------------------------------------------------------*/
@@ -51,8 +124,10 @@ function undo() {
 
     isRestoring = true;
     canvas.loadFromJSON(previousState, () => {
-        canvas.renderAll();
-        isRestoring = false;
+        setCanvasBackgroundImage(currentBackground, () => {
+            canvas.renderAll();
+            isRestoring = false;
+        });
     });
 }
 
@@ -66,8 +141,10 @@ function redo() {
 
     isRestoring = true;
     canvas.loadFromJSON(nextState, () => {
-        canvas.renderAll();
-        isRestoring = false;
+        setCanvasBackgroundImage(currentBackground, () => {
+            canvas.renderAll();
+            isRestoring = false;
+        });
     });
 }
 
@@ -97,7 +174,7 @@ function resizeCanvas() {
     const wrapperWidth = wrapper.clientWidth;
     const wrapperHeight = wrapper.clientHeight;
 
-    const aspectRatio = canvas.width / canvas.height;
+    const aspectRatio = BASE_CANVAS_WIDTH / BASE_CANVAS_HEIGHT;
     let newWidth, newHeight;
 
     if (wrapperWidth / wrapperHeight > aspectRatio) {
@@ -109,7 +186,8 @@ function resizeCanvas() {
     }
 
     canvas.setDimensions({ width: newWidth, height: newHeight });
-    canvas.setZoom(newWidth / 1000); // Assuming original width is 1000
+    canvas.setZoom(newWidth / BASE_CANVAS_WIDTH);
+    setCanvasBackgroundImage(currentBackground);
 }
 
 window.addEventListener('resize', resizeCanvas);
@@ -120,8 +198,11 @@ function saveBoard() {
     const autoSaveLabel = document.getElementById("AutoSave");
     autoSaveLabel.textContent = "Saving...";
     
-    const boardData = JSON.stringify(canvas.toJSON(['customFilters']));
-    localStorage.setItem("manifest-board", boardData);
+    const canvasData = canvas.toJSON(['customFilters']);
+    delete canvasData.backgroundImage;
+
+    const boardData = {canvas: canvasData, background: currentBackground };
+    localStorage.setItem("manifest-board", JSON.stringify(boardData));
     setTimeout(() => {
         autoSaveLabel.textContent = "Saved";
     }, 1000);
@@ -183,9 +264,7 @@ function applyFilters(img) {
 function initializeFilters(img) {
 
     if (!img.customFilters) {
-
         img.customFilters = {
-
             brightness: 0,
             contrast: 0,
             saturation: 0,
@@ -194,11 +273,8 @@ function initializeFilters(img) {
             grayscale: false,
             sepia: false,
             invert: false
-
         };
-
     }
-
 }
 
 function updateImageEditorUI(img) {
@@ -327,7 +403,7 @@ const clearBoardBtn = document.getElementById("ClearBoard");
 clearBoardBtn.addEventListener("click", () => {
     if (confirm("Are you sure you want to clear the vision board? This action cannot be undone.")) {
         canvas.clear();
-        canvas.setBackgroundColor('#b98b62', canvas.renderAll.bind(canvas));
+        setCanvasBackgroundImage();
     }
 
     localStorage.removeItem("manifest-board");
@@ -420,9 +496,12 @@ saveBoardBtn.addEventListener("click", () => {
 
 // automatically load saved board on page load
 window.addEventListener("load", () => {
-    const savedBoard = localStorage.getItem("manifest-board");
-    if (savedBoard) {
-        canvas.loadFromJSON(savedBoard, () => {
+    const savedData = JSON.parse(localStorage.getItem("manifest-board"));
+    if (savedData) {
+        const savedCanvas = savedData.canvas || savedData;
+        currentBackground = savedData.background || currentBackground;
+
+        canvas.loadFromJSON(savedCanvas, () => {
             canvas.getObjects().forEach(obj => {
                 if (obj.type === "image") {
                     initializeFilters(obj);
@@ -430,7 +509,10 @@ window.addEventListener("load", () => {
                     obj.dirty = true;
                 }
             });
-            canvas.renderAll();
+
+            setCanvasBackgroundImage(currentBackground, () => {
+                canvas.renderAll();
+            });
         });
     }
 });
@@ -907,3 +989,69 @@ resetFiltersBtn.addEventListener("click", () => {
     applyFilters(img);
 });
 
+/*-----------------------------------------------------------SETTINGS-----------------------------------------------------------*/
+const settingsBtn = document.getElementById("SettingsBtn");
+const settingsModal = document.getElementById("settingsOverlay");
+
+settingsBtn.addEventListener("click", () => {
+    settingsModal.style.display = "block";
+});
+
+const closeSettingsBtn = document.getElementById("closeSettings");
+closeSettingsBtn.addEventListener("click", () => {
+    settingsModal.style.display = "none";
+});
+
+const corkBoardOption = document.getElementById("cork-preview");
+corkBoardOption.addEventListener("click", () => {
+    currentBackground = 'assets/backgrounds/cork-board.jpg';
+    setCanvasBackgroundImage(currentBackground, () => {
+        canvas.renderAll();
+        saveBoard();
+    });
+});
+
+const whiteBoardOption = document.getElementById("whiteB-preview");
+whiteBoardOption.addEventListener("click", () => {
+    currentBackground = 'assets/backgrounds/white-board.jpg';
+    setCanvasBackgroundImage(currentBackground, () => {
+        canvas.renderAll();
+        saveBoard();
+    });
+});
+
+const gridPaperOption = document.getElementById("grid-preview");
+gridPaperOption.addEventListener("click", () => {
+    currentBackground = 'assets/backgrounds/grid-paper.jpg';
+    setCanvasBackgroundImage(currentBackground, () => {
+        canvas.renderAll();
+        saveBoard();
+    });
+});
+
+const dottedPaperOption = document.getElementById("dotted-preview");
+dottedPaperOption.addEventListener("click", () => {
+    currentBackground = 'assets/backgrounds/dotted-paper.jpg';
+    setCanvasBackgroundImage(currentBackground, () => {
+        canvas.renderAll();
+        saveBoard();
+    });
+});
+
+const scrapBookOption = document.getElementById("scrapB-preview");
+scrapBookOption.addEventListener("click", () => {
+    currentBackground = 'assets/backgrounds/white-scrapbook-paper.jpg';
+    setCanvasBackgroundImage(currentBackground, () => {
+        canvas.renderAll();
+        saveBoard();
+    });
+});
+
+const darkPaperOption = document.getElementById("dark-preview");
+darkPaperOption.addEventListener("click", () => {
+    currentBackground = 'assets/backgrounds/dark-paper.jpg';
+    setCanvasBackgroundImage(currentBackground, () => {
+        canvas.renderAll();
+        saveBoard();
+    });
+});

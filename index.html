@@ -97,10 +97,10 @@
                 <button id="clear">X</button>
             </div>
         </div>
-
         
         <div id="BoardWrapper">
             <h4 id="AutoSave">Saved</h4>
+            <button id="SettingsBtn">Settings</button>
             <canvas id="VisionBoard"></canvas>
         </div>
 
@@ -144,6 +144,62 @@
                         <img src="assets/frames/headphones.png" class="pre-sticker" alt="Frame 1">
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Settings modal -->
+        <div id="settingsOverlay" class="hidden">
+            <div id="settings-content">
+                <h3>Settings</h3>
+                <div class="setting-option">
+                    <label for="board-background">Board-background:</label>
+                    <div class="board-grid">
+                        <div class="grid-option">
+                            <div class="grid-preview" id="cork-preview">
+                                <img src="assets/backgrounds/cork-board.jpg" alt="Cork Board" class="grid-image">
+                            </div>
+                            <label for="grid1" class="grid-label">Cork Board</label>
+                        </div>
+                        <div class="grid-option">
+                            <div class="grid-preview" id="whiteB-preview">
+                                <img src="assets/backgrounds/white-board.jpg" alt="White Board" class="grid-image">
+                            </div>
+                            <label for="grid2" class="grid-label">White Board</label>
+                        </div>
+                        <div class="grid-option">
+                            <div class="grid-preview" id="grid-preview">
+                                <img src="assets/backgrounds/grid-paper.jpg" alt="Grid Paper" class="grid-image">
+                            </div>
+                            <label for="grid3" class="grid-label">Grid Paper</label>
+                        </div>
+                        <div class="grid-option">
+                            <div class="grid-preview" id="dotted-preview">
+                                <img src="assets/backgrounds/dotted-paper.jpg" alt="Dotted Paper" class="grid-image">
+                            </div>
+                            <label for="grid4" class="grid-label">Dotted Paper</label>
+                        </div>
+                        <div class="grid-option">
+                            <div class="grid-preview" id="scrapB-preview">
+                                <img src="assets/backgrounds/white-scrapbook-paper.jpg" alt="Scrapbook Paper" class="grid-image">
+                            </div>
+                            <label for="grid5" class="grid-label">Scrapbook Paper</label>
+                        </div>
+                        <div class="grid-option">
+                            <div class="grid-preview" id="dark-preview">
+                                <img src="assets/backgrounds/dark-paper.jpg" alt="Dark Paper" class="grid-image">
+                            </div>
+                            <label for="grid6" class="grid-label">Dark Paper</label>
+                        </div>
+                    </div>
+                </div>
+                <!--<div class="setting-option">
+                    <label for="website-background">Website-background:</label>
+                    <label class="switch">
+                        <input type="checkbox" id="website-background"/>
+                        <span class="slider"></span>
+                    </label>
+                </div>-->
+                <button id="closeSettings" class="close-settings">Close</button>
             </div>
         </div>
 
