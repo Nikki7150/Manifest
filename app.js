@@ -583,6 +583,27 @@ document.addEventListener("keydown", (e) => {
     }
 });
 
+const groupBtn = document.getElementById("GroupObjects");
+groupBtn.addEventListener("click", () => {
+    const activeObject = canvas.getActiveObject();
+    if (!activeObject || activeObject.type !== "activeSelection") {
+        alert("Select at least 2 objects.");
+        return;
+    }
+    const group = activeObject.toGroup();
+    canvas.setActiveObject(group);
+    canvas.renderAll();
+    saveBoard();
+});
+
+const ungroupBtn = document.getElementById("UngroupObjects");
+ungroupBtn.addEventListener("click", () => {
+    const activeObject = canvas.getActiveObject();
+    if (!activeObject || activeObject.type !== "group") return;
+    activeObject.toActiveSelection();
+    canvas.renderAll();
+    saveBoard();
+});
 
 /*-----------------------------------------------------------TOOLBAR FUNCTIONALITY-----------------------------------------------------------*/
 let activeModal = null;
