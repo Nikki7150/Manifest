@@ -22,7 +22,7 @@ button {
   padding: 10px 16px;
   border: none;
   border-radius: 10px;
-  background: rgb(230, 185, 207);
+  background: rgb(213, 161, 187);
   color: white;
   cursor: pointer;
 }
@@ -99,11 +99,9 @@ canvas {
   right: 10%;
   width: 80%;
   height: 13%;
-  /*background-color: rgb(230, 185, 207);*/
-  background-color: transparent;
+  background-color: rgb(230, 185, 207);
   display: flex;
   border-radius: 12px;
-  overflow: hidden;
   z-index: 50;
 }
 
@@ -114,9 +112,9 @@ canvas {
 .close {
   cursor: pointer;
   font-size: 50px;
-  position: absolute;
-  top: 80px;
-  right: 10px;
+  position: fixed;
+  bottom: 40%;
+  right: 12%;
 }
 
 .pre-sticker {
@@ -124,7 +122,7 @@ canvas {
   margin: 80px;
   cursor: pointer;
 }
-
+/*
 #stickerModal {
   background-image: url(assets/tabs/stickers-tab.png);
   background-size: cover;
@@ -141,6 +139,17 @@ canvas {
   background-image: url(assets/tabs/frames-tab.png);
   background-size: cover;
   background-repeat: no-repeat;
+  overflow: auto;
+}*/
+
+#frameContainer .frame-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 20px;
+  flex-wrap: wrap;
+  overflow: auto;
 }
 
 #TabsBackground {

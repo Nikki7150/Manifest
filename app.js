@@ -300,6 +300,24 @@ function updateImageEditorUI(img) {
         img.customFilters.invert;
 }
 
+function addImageToCanvas(src) {
+    fabric.Image.fromURL(src, (img) => {
+        initializeFilters(img);
+
+        img.set({
+            left: 150,
+            top: 150,
+            scaleX: 0.5,
+            scaleY: 0.5
+        });
+
+        canvas.add(img);
+        canvas.setActiveObject(img);
+        canvas.renderAll();
+        saveBoard();
+    });
+}
+
 /*-----------------------------------------------------------BUTTON FUNCTIONALITY-----------------------------------------------------------*/
 // AddText button
 const addTextBtn = document.getElementById("AddTextButton");
@@ -708,6 +726,26 @@ frameModalBtn.addEventListener("click", () => {
     }, 500);
 });
 
+fetch("assets/data/frames.json")
+  .then(res => res.json())
+  .then(frames => {
+    const container = document.getElementById("frameContainer");
+
+    frames.forEach(file => {
+      const img = document.createElement("img");
+
+      img.src = `assets/frames/${file}`;
+      img.classList.add("pre-sticker");
+      img.alt = file;
+
+      img.addEventListener("click", () => {
+        addImageToCanvas(img.src);
+      });
+
+      container.appendChild(img);
+    });
+  });
+
 closeFrameBtn.addEventListener("click", () => {
     frameModal.classList.remove("slideUp");
     toolbar.style.display = "none";
@@ -737,19 +775,7 @@ window.addEventListener("click", (e) => {
 const stickers = document.querySelectorAll(".pre-sticker");
 stickers.forEach(sticker => {
     sticker.addEventListener("click", () => {
-        const src = sticker.getAttribute("src");
-        fabric.Image.fromURL(src, (img) => {
-            initializeFilters(img);
-            img.set({
-                left: 150,
-                top: 150,
-                scaleX: 0.5,
-                scaleY: 0.5
-            });
-            canvas.add(img);
-            canvas.setActiveObject(img);
-            canvas.renderAll();
-        });
+        addImageToCanvas(sticker.getAttribute("src"));
     });
 });
 
