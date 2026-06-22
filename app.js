@@ -649,6 +649,14 @@ toolbarBtns.forEach(btn => {
             targetModal.style.height = "50%";
             toolbar.style.display = "flex";
             toolbar.style.zIndex = "101";
+            // change color of active button
+            toolbarBtns.forEach(button => {
+                if (button === btn) {
+                    button.classList.add("active");
+                } else {
+                    button.classList.remove("active");
+                }
+            });
         }
     });
 });
@@ -670,6 +678,13 @@ stickerModalBtn.addEventListener("click", () => {
         toolbar.style.display = "flex";
         toolbar.style.zIndex = "101";
     }, 500);
+    toolbarBtns.forEach(button => {
+        if (button.id === "sbtn") {
+            button.classList.add("active");
+        } else {
+            button.classList.remove("active");
+        }
+    });
 });
 
 closeStickerBtn.addEventListener("click", () => {
@@ -688,6 +703,13 @@ const decorModalBtn = document.getElementById("DecorButton");
 const decorModal = document.getElementById("decorModal");
 const closeDecorBtn = document.getElementById("closeDecor");
 
+const dividersBtn = document.getElementById("dividersBtn");
+const doodlesBtn = document.getElementById("doodlesBtn");
+const paperBtn = document.getElementById("paperBtn");
+const shapesBtn = document.getElementById("shapesBtn");
+const tapesBtn = document.getElementById("tapesBtn");
+
+
 decorModalBtn.addEventListener("click", () => {
     activeModal = decorModal;
     decorModal.classList.add("slideUp");
@@ -697,7 +719,67 @@ decorModalBtn.addEventListener("click", () => {
         toolbar.style.display = "flex";
         toolbar.style.zIndex = "101";
     }, 500);
+    toolbarBtns.forEach(button => {
+        if (button.id === "dbtn") {
+            button.classList.add("active");
+        } else {
+            button.classList.remove("active");
+        }
+    });
+    // make the dividers category active by default, and load the dividers decor items
+    dividersBtn.classList.add("active");
+    fetch("assets/data/decor/dividers.json")
+        .then(res => res.json())
+        .then(items => {
+            const container = document.getElementById("decorContainer");
+            container.innerHTML = "";
+            items.forEach(file => {
+                const img = document.createElement("img");
+                img.src = `assets/decor/dividers/${file}`;
+                img.classList.add("pre-sticker");
+                img.alt = file;
+                img.addEventListener("click", () => {
+                    addImageToCanvas(img.src);
+                });
+                container.appendChild(img);
+            });
+        })
+        .catch(err => {
+            console.error("Error loading dividers decor:", err);
+        });
 });
+
+
+[dividersBtn, doodlesBtn, paperBtn, shapesBtn, tapesBtn].forEach(button => {
+    button.addEventListener("click", () => {
+        [dividersBtn, doodlesBtn, paperBtn, shapesBtn, tapesBtn].forEach(btn => {
+            btn.classList.remove("active");
+        });
+        button.classList.add("active");
+        const category = button.id.replace("Btn", "");
+        fetch(`assets/data/decor/${category.toLowerCase()}.json`)
+            .then(res => res.json())
+            .then(items => {
+                const container = document.getElementById("decorContainer");
+                container.innerHTML = "";
+                items.forEach(file => {
+                    const img = document.createElement("img");
+                    img.src = `assets/decor/${category.toLowerCase()}/${file}`;
+                    img.classList.add("pre-sticker");
+                    img.alt = file;
+                    img.addEventListener("click", () => {
+                        addImageToCanvas(img.src);
+                    });
+                    container.appendChild(img);
+                });
+            })
+            .catch(err => {
+                console.error(`Error loading ${category} decor:`, err);
+            });
+    });
+});
+
+
 
 closeDecorBtn.addEventListener("click", () => {
     decorModal.classList.remove("slideUp");
@@ -707,6 +789,10 @@ closeDecorBtn.addEventListener("click", () => {
         decorModal.style.display = "none";
         decorModal.classList.remove("slideDown");
     }, 500);
+    // reset category buttons
+    [dividersBtn, doodlesBtn, paperBtn, shapesBtn, tapesBtn].forEach(btn => {
+        btn.classList.remove("active");
+    });
 });
 
 
@@ -724,6 +810,13 @@ frameModalBtn.addEventListener("click", () => {
         toolbar.style.display = "flex";
         toolbar.style.zIndex = "101";
     }, 500);
+    toolbarBtns.forEach(button => {
+        if (button.id === "fbtn") {
+            button.classList.add("active");
+        } else {
+            button.classList.remove("active");
+        }
+    });
 });
 
 fetch("assets/data/frames.json")

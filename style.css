@@ -93,16 +93,12 @@ canvas {
 }
 
 .modal {
-  position: fixed;
-  bottom: 0;
-  left: 10%;
-  right: 10%;
-  width: 80%;
-  height: 13%;
-  background-color: rgb(230, 185, 207);
-  display: flex;
-  border-radius: 12px;
-  z-index: 50;
+    background-color: rgb(230, 185, 207);
+    display: flex;
+    flex-direction: column;
+    border-radius: 12px;
+    z-index: 50;
+    overflow: hidden;
 }
 
 .hidden {
@@ -118,29 +114,110 @@ canvas {
 }
 
 .pre-sticker {
-  width: 80px;
-  margin: 80px;
+  width: 120px;
+  margin: 60px;
+  margin-top: 0;
   cursor: pointer;
 }
-/*
+
+.pre-sticker:hover {
+  transform: scale(1.1);
+  transition: transform 0.3s ease;
+  background-color: rgb(232, 218, 225);
+}
+
 #stickerModal {
-  background-image: url(assets/tabs/stickers-tab.png);
-  background-size: cover;
-  background-repeat: no-repeat;
+  position: fixed;
+  bottom: 0;
+  left: 10%;
+  right: 10%;
+  width: 80%;
+  height: 13%;
+  background-color: rgb(230, 185, 207);
 }
 
 #decorModal {
-  background-image: url(assets/tabs/decor-tab.png);
-  background-size: cover;
-  background-repeat: no-repeat;
+  position: fixed;
+  bottom: 0;
+  left: 10%;
+  right: 10%;
+  width: 80%;
+  height: 13%;
+  background-color: rgb(230, 185, 207);
 }
 
 #framesModal {
-  background-image: url(assets/tabs/frames-tab.png);
-  background-size: cover;
-  background-repeat: no-repeat;
+  position: fixed;
+  bottom: 0;
+  left: 10%;
+  right: 10%;
+  width: 80%;
+  height: 13%;
+  background-color: rgb(230, 185, 207);
+}
+
+.sticker-container,
+.decor-container,
+.frame-container {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+}
+
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+#modal-content,
+.modal-content {
+    height: 70%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    margin-top: auto;
+    position: absolute;
+    bottom: 0;
+}
+
+#decorContainer,
+#stickerContainer,
+#frameContainer {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+
+/*
+#stickerContainer .sticker-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 20px;
+  flex-wrap: wrap;
+  background-color: #8a5a44;
   overflow: auto;
-}*/
+}
+
+#decorContainer .decor-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 20px;
+  flex-wrap: wrap;
+  background-color: #8a5a44;
+  overflow: auto;
+}
 
 #frameContainer .frame-container {
   display: flex;
@@ -149,16 +226,20 @@ canvas {
   gap: 10px;
   padding: 20px;
   flex-wrap: wrap;
+  background-color: #8a5a44;
   overflow: auto;
-}
+}*/
 
 #TabsBackground {
   position: fixed;
   right: 10%;
   left: 10%;
+  height: 13%;
   bottom: 0;
   width: 80%;
   z-index: -1;
+  background-color: rgb(230, 185, 207);
+  border-radius: 12px 12px 0 0;
 }
 
 #StickersButton, #sbtn {
@@ -303,21 +384,22 @@ canvas {
     }
 }
 
-#fontList::-webkit-scrollbar {
+/* Custom scrollbar for all scrollbars */
+::-webkit-scrollbar {
     width: 10px;
 }
 
-#fontList::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
     background: #f6eef3;
     border-radius: 8px;
 }
 
-#fontList::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
     background: rgb(230, 137, 182);
     border-radius: 8px;
 }
 
-#fontList::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover {
     background: rgb(188, 85, 135);
 }
 
@@ -491,4 +573,35 @@ label {
     left: -20px !important;
     margin-top: 0;
     color: rgb(143, 84, 84);
+}
+
+.categoryOptions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    position: absolute;
+    top: 20%;
+    left: 10%;
+    right: 10%;
+}
+
+.category-btn {
+    padding: 8px 12px;
+    border: 1px solid rgb(188, 85, 135);
+    border-radius: 8px;
+    background: transparent;
+    color: rgb(188, 85, 135);
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.category-btn.active {
+    background-color: rgb(230, 137, 182);
+    color: white;
+}
+
+.category-btn:hover {
+    background: rgb(230, 185, 207);
+    color: white;
 }

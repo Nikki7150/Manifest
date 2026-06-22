@@ -106,11 +106,12 @@
             <canvas id="VisionBoard"></canvas>
         </div>
 
-        <img src="assets/tabs/temp-tabs.jpeg" id="TabsBackground" alt="Tabs Background">
-        <div id="ItemsToolBar">
-            <button id="StickersButton" class="toolbar-btn">Stickers</button>
-            <button id="DecorButton" class="toolbar-btn">Decor</button>
-            <button id="FramesButton" class="toolbar-btn">Frames</button>
+        <div id="TabsBackground">
+            <div id="ItemsToolBar">
+                <button id="StickersButton" class="toolbar-btn">Stickers</button>
+                <button id="DecorButton" class="toolbar-btn">Decor</button>
+                <button id="FramesButton" class="toolbar-btn">Frames</button>
+            </div>
         </div>
 
         <!-- Modals -->
@@ -121,6 +122,12 @@
                 <button id="fbtn" class="toolbar-btn">Frames</button>
             </div>
             <div id="stickerModal" class="modal hidden">
+                <div class="categoryOptions">
+                    <button id="flowersBtn" class="category-btn active">Flowers</button>
+                    <button id="schoolBtn" class="category-btn">School</button>
+                    <button id="travelBtn" class="category-btn">Travel</button>
+                    <button id="miscellaneousBtn" class="category-btn">Miscellaneous</button>
+                </div>
                 <div class="modal-content">
                     <span id="closeSticker" class="close">&times;</span>
                     <div id="stickerContainer" class="sticker-container">
@@ -131,11 +138,16 @@
             </div>
 
             <div id="decorModal" class="modal hidden">
+                <div class="categoryOptions">
+                    <button id="dividersBtn" class="category-btn active">Dividers</button>
+                    <button id="doodlesBtn" class="category-btn">Doodles</button>
+                    <button id="paperBtn" class="category-btn">Paper</button>
+                    <button id="shapesBtn" class="category-btn">Shapes</button>
+                    <button id="tapesBtn" class="category-btn">Tapes</button>
+                </div>
                 <div id="modal-content">
                     <span id="closeDecor" class="close">&times;</span>
-                    <div id="decorContainer" class="decor-container">
-                        <img src="assets/decor/bow.png" class="pre-sticker" alt="Decor 1">
-                    </div>
+                    <div id="decorContainer" class="decor-container"></div>
                 </div>
             </div>
 
