@@ -669,6 +669,12 @@ const stickerModal = document.getElementById("stickerModal");
 const closeStickerBtn = document.getElementById("closeSticker");
 const toolbar = document.getElementById("ToolBar");
 
+const flowersBtn = document.getElementById("flowersBtn");
+const schoolBtn = document.getElementById("schoolBtn");
+const sealsBtn = document.getElementById("sealsBtn");
+const bowsBtn = document.getElementById("bowsBtn");
+const travelBtn = document.getElementById("travelBtn");
+
 stickerModalBtn.addEventListener("click", () => {
     activeModal = stickerModal;
     stickerModal.style.display = "block";
@@ -685,7 +691,59 @@ stickerModalBtn.addEventListener("click", () => {
             button.classList.remove("active");
         }
     });
+
+    // make the dividers category active by default, and load the dividers decor items
+    flowersBtn.classList.add("active");
+    fetch("assets/data/stickers/flowers.json")
+        .then(res => res.json())
+        .then(items => {
+            const container = document.getElementById("stickerContainer");
+            container.innerHTML = "";
+            items.forEach(file => {
+                const img = document.createElement("img");
+                img.src = `assets/stickers/flowers/${file}`;
+                img.classList.add("pre-sticker");
+                img.alt = file;
+                img.addEventListener("click", () => {
+                    addImageToCanvas(img.src);
+                });
+                container.appendChild(img);
+            });
+        })
+        .catch(err => {
+            console.error("Error loading flowers stickers:", err);
+        });
 });
+
+[flowersBtn, schoolBtn, sealsBtn, bowsBtn, travelBtn].forEach(button => {
+    button.addEventListener("click", () => {
+        [flowersBtn, schoolBtn, sealsBtn, bowsBtn, travelBtn].forEach(btn => {
+            btn.classList.remove("active");
+        });
+        button.classList.add("active");
+        const category = button.id.replace("Btn", "");
+        fetch(`assets/data/stickers/${category.toLowerCase()}.json`)
+            .then(res => res.json())
+            .then(items => {
+                const container = document.getElementById("stickerContainer");
+                container.innerHTML = "";
+                items.forEach(file => {
+                    const img = document.createElement("img");
+                    img.src = `assets/stickers/${category.toLowerCase()}/${file}`;
+                    img.classList.add("pre-sticker");
+                    img.alt = file;
+                    img.addEventListener("click", () => {
+                        addImageToCanvas(img.src);
+                    });
+                    container.appendChild(img);
+                });
+            })
+            .catch(err => {
+                console.error(`Error loading ${category} stickers:`, err);
+            });
+    });
+});
+
 
 closeStickerBtn.addEventListener("click", () => {
     stickerModal.classList.remove("slideUp");
@@ -695,6 +753,11 @@ closeStickerBtn.addEventListener("click", () => {
         stickerModal.style.display = "none";
         stickerModal.classList.remove("slideDown");
     }, 500);
+
+    // reset category buttons
+    [flowersBtn, schoolBtn, sealsBtn, bowsBtn, travelBtn].forEach(btn => {
+        btn.classList.remove("active");
+    });
 });
 
 
@@ -708,6 +771,7 @@ const doodlesBtn = document.getElementById("doodlesBtn");
 const paperBtn = document.getElementById("paperBtn");
 const shapesBtn = document.getElementById("shapesBtn");
 const tapesBtn = document.getElementById("tapesBtn");
+const magazineBtn = document.getElementById("magazineBtn");
 
 
 decorModalBtn.addEventListener("click", () => {
@@ -750,9 +814,9 @@ decorModalBtn.addEventListener("click", () => {
 });
 
 
-[dividersBtn, doodlesBtn, paperBtn, shapesBtn, tapesBtn].forEach(button => {
+[dividersBtn, doodlesBtn, paperBtn, shapesBtn, tapesBtn, magazineBtn].forEach(button => {
     button.addEventListener("click", () => {
-        [dividersBtn, doodlesBtn, paperBtn, shapesBtn, tapesBtn].forEach(btn => {
+        [dividersBtn, doodlesBtn, paperBtn, shapesBtn, tapesBtn, magazineBtn].forEach(btn => {
             btn.classList.remove("active");
         });
         button.classList.add("active");
@@ -790,7 +854,7 @@ closeDecorBtn.addEventListener("click", () => {
         decorModal.classList.remove("slideDown");
     }, 500);
     // reset category buttons
-    [dividersBtn, doodlesBtn, paperBtn, shapesBtn, tapesBtn].forEach(btn => {
+    [dividersBtn, doodlesBtn, paperBtn, shapesBtn, tapesBtn, magazineBtn].forEach(btn => {
         btn.classList.remove("active");
     });
 });
