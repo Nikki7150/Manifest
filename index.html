@@ -11,6 +11,19 @@
         <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Bebas+Neue&family=Caveat&family=Caveat+Brush&family=Dancing+Script&family=Gochi+Hand&family=Indie+Flower&family=Inter&family=Kalam&family=Lora&family=Merriweather&family=Montserrat&family=Pacifico&family=Permanent+Marker&family=Playfair+Display&family=Playpen+Sans&family=Poppins&family=Shadows+Into+Light&display=swap" rel="stylesheet">
     </head>
     <body>
+        <div id="menuBar">
+            <div id="menu">
+                <button id="Undo" class="menu-btn">Undo</button>
+                <button id="Redo" class="menu-btn">Redo</button>
+                <button id="DownloadBoard" class="menu-btn">Download</button>
+                <button id="ClearBoard" class="menu-btn">Clear</button>
+                <button id="SaveBoard" class="menu-btn">Save</button>
+                <button id="DrawingMode" class="menu-btn">Drawing Mode</button>
+            </div>
+            <h4 id="AutoSave">Saved</h4>
+            <button id="SettingsBtn">Settings</button>
+        </div>
+
         <h1>Manifest</h1>
 
         <!-- Text edit modal -->
@@ -76,16 +89,10 @@
         <div id="CanvasToolBar">
             <button id="AddTextButton" class="toolbar-btn">Add Text</button>
             <button id="UploadImageButton" class="toolbar-btn">Upload</button>
-            <button id="DeleteObject" class="toolbar-btn">Delete</button>
-            <button id="DownloadBoard" class="toolbar-btn">Download</button>
-            <button id="ClearBoard" class="toolbar-btn">Clear Board</button>
             <input type="file" id="ImageUploadInput" accept="image/*" hidden />
+            <button id="DeleteObject" class="toolbar-btn">Delete</button>
             <button id="BringForward" class="toolbar-btn">Bring Forward</button>
             <button id="SendBackward" class="toolbar-btn">Send Backward</button>
-            <button id="DrawingMode">Drawing Mode</button>
-            <button id="SaveBoard" class="toolbar-btn">Save Board</button>
-            <button id="Undo" class="toolbar-btn">Undo</button>
-            <button id="Redo" class="toolbar-btn">Redo</button>
             <button id="Duplicate" class="toolbar-btn">Duplicate</button>
             <button id="GroupObjects" class="toolbar-btn">Group</button>
             <button id="UngroupObjects" class="toolbar-btn">Ungroup</button>
@@ -101,8 +108,6 @@
         </div>
         
         <div id="BoardWrapper">
-            <h4 id="AutoSave">Saved</h4>
-            <button id="SettingsBtn">Settings</button>
             <canvas id="VisionBoard"></canvas>
         </div>
 
@@ -206,13 +211,6 @@
                         </div>
                     </div>
                 </div>
-                <!--<div class="setting-option">
-                    <label for="website-background">Website-background:</label>
-                    <label class="switch">
-                        <input type="checkbox" id="website-background"/>
-                        <span class="slider"></span>
-                    </label>
-                </div>-->
                 <button id="closeSettings" class="close-settings">Close</button>
             </div>
         </div>

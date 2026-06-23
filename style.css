@@ -1,13 +1,23 @@
+:root {
+    --app-background-color: #f5e6ef;
+    --menu-bar-background-color: #a67e91;
+    --button-gradient-start: rgb(230, 185, 207);
+    --button-gradient-end: rgb(213, 161, 187);
+    --tabs-background-color: rgb(230, 185, 207);
+    --font-color: rgb(255, 255, 255);
+    --border-color: rgb(188, 85, 135);
+}
+
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: #f6eef3;
+  background: var(--app-background-color);
   text-align: center;
   overflow: hidden;
 }
 
 h1 {
-  margin-top: 20px;
+  margin-top: 4%;
 }
 
 #CanvasToolBar {
@@ -22,9 +32,13 @@ button {
   padding: 10px 16px;
   border: none;
   border-radius: 10px;
-  background: rgb(213, 161, 187);
-  color: white;
+  background: linear-gradient(to bottom, var(--button-gradient-start), var(--button-gradient-end));
+  color: var(--font-color);
   cursor: pointer;
+}
+
+button:hover {
+  background: var(--button-gradient-start);
 }
 
 #BoardWrapper {
@@ -39,30 +53,6 @@ canvas {
 
 .hidden {
     display: none;
-}
-
-#AutoSave {
-    position: absolute;
-    top: 10px;
-    right: 150px;
-    color: rgb(196, 196, 196);
-    padding: 5px 10px;
-    border-radius: 12px;
-    font-weight: bold;
-    z-index: 100;
-}
-
-#SettingsBtn {
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    background-color: transparent;
-    color: rgb(188, 85, 135);
-    padding: 8px 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    border: 1px solid rgb(188, 85, 135);
-    z-index: 100;
 }
 
 /* Animations */
@@ -93,7 +83,7 @@ canvas {
 }
 
 .modal {
-    background-color: rgb(230, 185, 207);
+    background-color: var(--tabs-background-color);
     display: flex;
     flex-direction: column;
     border-radius: 12px;
@@ -133,7 +123,7 @@ canvas {
   right: 10%;
   width: 80%;
   height: 13%;
-  background-color: rgb(230, 185, 207);
+  background-color: var(--tabs-background-color);
 }
 
 #decorModal {
@@ -143,7 +133,7 @@ canvas {
   right: 10%;
   width: 80%;
   height: 13%;
-  background-color: rgb(230, 185, 207);
+  background-color: var(--tabs-background-color);
 }
 
 #framesModal {
@@ -153,7 +143,7 @@ canvas {
   right: 10%;
   width: 80%;
   height: 13%;
-  background-color: rgb(230, 185, 207);
+  background-color: var(--tabs-background-color);
 }
 
 .sticker-container,
@@ -238,7 +228,7 @@ canvas {
   bottom: 0;
   width: 80%;
   z-index: -1;
-  background-color: rgb(230, 185, 207);
+  background-color: var(--tabs-background-color);
   border-radius: 12px 12px 0 0;
 }
 
@@ -291,8 +281,8 @@ canvas {
 }
 
 .active {
-  background-color: rgb(230, 137, 182);
-  color: white;
+  background-color: var(--border-color);
+  color: var(--font-color);
 }
 
 #brushSize {
@@ -373,14 +363,14 @@ canvas {
         border: none;
         border-radius: 8px;
         background: transparent;
-        color: rgb(188, 85, 135);
+        color: var(--border-color);
         cursor: pointer;
         font-size: 16px;
     }
 
     button:hover {
-        background: rgb(230, 185, 207);
-        color: white;
+        background: var(--button-gradient-start);
+        color: var(--font-color);
     }
 }
 
@@ -390,17 +380,17 @@ canvas {
 }
 
 ::-webkit-scrollbar-track {
-    background: #f6eef3;
+    background: var(--app-background-color);
     border-radius: 8px;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: rgb(230, 137, 182);
+    background: var(--border-color);
     border-radius: 8px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: rgb(188, 85, 135);
+    background: var(--border-color);
 }
 
 #fontColor {
@@ -479,17 +469,17 @@ canvas {
 }
 
 input:checked + .slider {
-  background-color: rgb(230, 185, 207);
+  background-color: var(--tabs-background-color);
 }
 
 input:checked + .slider::before {
   left: calc(100% - var(--icon-size, 1.4em) - var(--slider-offset, 0.3em));
-  background-color: rgb(143, 84, 84);
+  background-color: var(--border-color);
 }
 
 label {
     font-weight: bold;
-    color: rgb(143, 84, 84);
+    color: var(--border-color);
     float: right;
 }
 
@@ -504,39 +494,12 @@ label {
 
 #resetFilters {
   background-color: transparent;
-  color: rgb(188, 85, 135);
+  color: var(--border-color);
   padding: 8px 16px;
   border-radius: 8px;
   cursor: pointer;
-  border: 1px solid rgb(188, 85, 135);
+  border: 1px solid var(--border-color);
   margin-left: 30%;
-}
-
-#settingsOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.328);
-    z-index: 101;
-}
-
-#settings-content {
-    position: fixed;
-    right: 0;
-    width: 30%;
-    height: 100%;
-    background-color: rgb(255, 255, 255);
-    padding: 20px;
-    align-items: center;
-}
-
-.setting-option label {
-    position: absolute;
-    left: 20px;
-    margin-top: 0;
-    color: rgb(143, 84, 84);
 }
 
 .board-grid {
@@ -572,7 +535,7 @@ label {
     position: relative !important;
     left: -20px !important;
     margin-top: 0;
-    color: rgb(143, 84, 84);
+    color: var(--border-color);
 }
 
 .categoryOptions {
@@ -588,20 +551,115 @@ label {
 
 .category-btn {
     padding: 8px 12px;
-    border: 1px solid rgb(188, 85, 135);
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     background: transparent;
-    color: rgb(188, 85, 135);
+    color: var(--border-color);
     cursor: pointer;
     font-size: 16px;
 }
 
 .category-btn.active {
-    background-color: rgb(230, 137, 182);
-    color: white;
+    background-color: var(--border-color);
+    color: var(--font-color);
 }
 
 .category-btn:hover {
-    background: rgb(230, 185, 207);
-    color: white;
+    background: var(--button-gradient-start);
+    color: var(--font-color);
+}
+
+#menu {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.menu-btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--font-color);
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.menu-btn:hover {
+  background: var(--button-gradient-start);
+  color: var(--font-color);
+}
+
+#menuBar {
+  background-color: var(--menu-bar-background-color);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  padding: 10px;
+  padding-right: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#AutoSave {
+    position: absolute;
+    right: 12%;
+    color: rgb(196, 196, 196);
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-weight: bold;
+    z-index: 100;
+}
+
+#settingsOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.328);
+    z-index: 101;
+}
+
+#settings-content {
+    position: fixed;
+    right: 0;
+    width: 30%;
+    height: 100%;
+    background-color: white;
+    padding: 20px;
+    align-items: center;
+}
+
+.setting-option label {
+    position: absolute;
+    left: 20px;
+    margin-top: 0;
+    color: var(--border-color);
+}
+
+#SettingsBtn {
+    position: absolute;
+    right: 3%;
+    color: var(--font-color);
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1px solid var(--border-color);
+    z-index: 100;
+}
+
+#closeSettings {
+    position: absolute;
+    top: 3%;
+    right: 3%;
+    color: var(--font-color);
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1px solid var(--border-color);
+    z-index: 100;
 }

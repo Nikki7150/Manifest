@@ -102,7 +102,7 @@ canvas.on("object:removed", saveState);
 const undoBtn = document.getElementById("Undo");
 undoBtn.addEventListener("click", undo);
 
-// when cmd + z is pressed, copy the active object, and when cmd + y is pressed, paste the copied object
+// when cmd + z is pressed, undo, and when cmd + y is pressed, redo
 document.addEventListener("keydown", (e) => {
     if (e.metaKey && e.key === "z" || (e.ctrlKey && e.key === "z")) {undo();}
 
