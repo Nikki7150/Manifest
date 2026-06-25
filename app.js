@@ -192,6 +192,7 @@ function resizeCanvas() {
 
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas(); // Initial call to set the canvas size
+window.addEventListener('load', resizeCanvas);
 
 /*-----------------------------------------------------------BASE FUNCTIONS-----------------------------------------------------------*/
 function saveBoard() {

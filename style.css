@@ -6,54 +6,73 @@
     --tabs-background-color: rgb(230, 185, 207);
     --font-color: rgb(255, 255, 255);
     --border-color: rgb(188, 85, 135);
+    --menu-height: 62px;
+    --bottom-tray-height: clamp(88px, 13dvh, 118px);
+    --page-gutter: clamp(12px, 2vw, 24px);
 }
 
 body {
   margin: 0;
+  min-height: 100dvh;
+  box-sizing: border-box;
+  padding: var(--menu-height) var(--page-gutter) calc(var(--bottom-tray-height) + 14px);
   font-family: Arial, sans-serif;
   background: var(--app-background-color);
   text-align: center;
   overflow: hidden;
 }
 
-h1 {
-  margin-top: 4%;
+* {
+  box-sizing: border-box;
 }
 
-#CanvasToolBar {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  padding: 16px;
+h1 {
+  margin: clamp(10px, 2dvh, 18px) 0 clamp(8px, 1.4dvh, 14px);
+  font-size: clamp(2rem, 4dvh, 3rem);
+  line-height: 1;
 }
 
 button {
-  padding: 10px 16px;
+  padding: clamp(8px, 1.3dvh, 10px) clamp(10px, 1.4vw, 16px);
   border: none;
   border-radius: 10px;
   background: linear-gradient(to bottom, var(--button-gradient-start), var(--button-gradient-end));
   color: var(--font-color);
   cursor: pointer;
+  font-size: clamp(13px, 1.1vw, 16px);
+  line-height: 1.1;
+  white-space: nowrap;
 }
 
 button:hover {
   background: var(--button-gradient-start);
 }
 
-#BoardWrapper {
-  display: flex;
-  justify-content: center;
-}
-
 canvas {
   border: 2px solid #8a5a44;
   border-radius: 12px;
+  max-width: 100%;
+  max-height: 100%;
 }
 
-.hidden {
-    display: none;
+/* ----------------------------------------------------------LAYOUT---------------------------------------------------------- */
+#CanvasToolBar {
+  display: flex;
+  justify-content: center;
+  gap: clamp(6px, 1vw, 10px);
+  flex-wrap: wrap;
+  padding: clamp(6px, 1.5dvh, 12px) 0;
 }
+
+#BoardWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: clamp(300px, calc(100dvh - var(--menu-height) - var(--bottom-tray-height) - 150px), 600px);
+  min-height: 0;
+}
+
 
 /* Animations */
 .slideUp {
@@ -82,6 +101,7 @@ canvas {
   }
 }
 
+/* ----------------------------------------------------------BASE CLASSES---------------------------------------------------------- */
 .modal {
     background-color: var(--tabs-background-color);
     display: flex;
@@ -103,10 +123,17 @@ canvas {
   right: 12%;
 }
 
+.active {
+  background-color: var(--border-color);
+  color: var(--font-color);
+}
+
+/* ----------------------------------------------------------STICKERS, DECOR, FRAMES---------------------------------------------------------- */
 .pre-sticker {
-  max-width: 120px;
-  margin: 60px;
-  margin-top: 0;
+  max-width: clamp(74px, 9vw, 120px);
+  max-height: clamp(58px, 12dvh, 120px);
+  margin: clamp(8px, 1.2vw, 18px);
+  object-fit: contain;
   cursor: pointer;
 }
 
@@ -122,7 +149,7 @@ canvas {
   left: 10%;
   right: 10%;
   width: 80%;
-  height: 13%;
+  height: var(--bottom-tray-height);
   background-color: var(--tabs-background-color);
 }
 
@@ -132,7 +159,7 @@ canvas {
   left: 10%;
   right: 10%;
   width: 80%;
-  height: 13%;
+  height: var(--bottom-tray-height);
   background-color: var(--tabs-background-color);
 }
 
@@ -142,7 +169,7 @@ canvas {
   left: 10%;
   right: 10%;
   width: 80%;
-  height: 13%;
+  height: var(--bottom-tray-height);
   background-color: var(--tabs-background-color);
 }
 
@@ -155,8 +182,9 @@ canvas {
 
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
-    padding: 20px;
+    justify-content: center;
+    gap: clamp(8px, 1.5vw, 18px);
+    padding: clamp(10px, 2dvh, 20px);
 }
 
 .modal-content {
@@ -185,106 +213,64 @@ canvas {
   overflow-y: auto;
 }
 
-
-/*
-#stickerContainer .sticker-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  padding: 20px;
-  flex-wrap: wrap;
-  background-color: #8a5a44;
-  overflow: auto;
-}
-
-#decorContainer .decor-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  padding: 20px;
-  flex-wrap: wrap;
-  background-color: #8a5a44;
-  overflow: auto;
-}
-
-#frameContainer .frame-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  padding: 20px;
-  flex-wrap: wrap;
-  background-color: #8a5a44;
-  overflow: auto;
-}*/
-
 #TabsBackground {
   position: fixed;
   right: 10%;
   left: 10%;
-  height: 13%;
+  height: var(--bottom-tray-height);
   bottom: 0;
   width: 80%;
-  z-index: -1;
+  z-index: 20;
   background-color: var(--tabs-background-color);
   border-radius: 12px 12px 0 0;
 }
 
 #StickersButton, #sbtn {
-  position: absolute;
-  bottom: 5.3%;
-  left: 2.5%;
-  width: 208px;
-  height: 75px;
+  position: static;
+  width: clamp(138px, 16vw, 208px);
+  height: clamp(44px, 7dvh, 75px);
 }
 
 #DecorButton, #dbtn {
-  position: absolute;
-  bottom: 5.3%;
-  left: 20.3%;
-  width: 208px;
-  height: 75px;
+  position: static;
+  width: clamp(138px, 16vw, 208px);
+  height: clamp(44px, 7dvh, 75px);
 }
 
 #FramesButton, #fbtn {
-  position: absolute;
-  bottom: 5.3%;
-  left: 37.6%;
-  width: 208px;
-  height: 75px;
+  position: static;
+  width: clamp(138px, 16vw, 208px);
+  height: clamp(44px, 7dvh, 75px);
 }
 
 #ItemsToolBar {
   display: flex;
   justify-content: center;
-  gap: 10px;
+  align-items: center;
+  gap: clamp(8px, 1.5vw, 16px);
   flex-wrap: wrap;
   position: fixed;
-  bottom: 5.3%;
+  bottom: clamp(16px, 3.5dvh, 34px);
   left: 10%;
   right: 10%;
+  z-index: 21;
   transition: bottom 0.5s ease-out;
 }
 
 #ToolBar {
   display: none;
   justify-content: center;
-  gap: 10px;
+  align-items: center;
+  gap: clamp(8px, 1.5vw, 16px);
   flex-wrap: wrap;
   position: fixed;
-  bottom: 42.7%;
+  bottom: calc(50dvh - clamp(54px, 7dvh, 80px));
   left: 10%;
   right: 10%;
   z-index: 101;
 }
 
-.active {
-  background-color: var(--border-color);
-  color: var(--font-color);
-}
-
+/* ----------------------------------------------------------TOOLBOX---------------------------------------------------------- */
 #brushSize {
     width: 120px;
     cursor: pointer;
@@ -312,7 +298,7 @@ canvas {
     width: 40px;
     position: absolute;
     right: 15%;
-    top: 20%;
+    top: clamp(110px, 20dvh, 190px);
 }
 
 #color::-webkit-color-swatch-wrapper {
@@ -502,6 +488,7 @@ label {
   margin-left: 30%;
 }
 
+/* ----------------------------------------------------------STICKERS, DECOR, FRAMES MODAL CONTENTS---------------------------------------------------------- */
 .board-grid {
     position: absolute;
     top: 10%;
@@ -541,22 +528,25 @@ label {
 .categoryOptions {
     display: flex;
     justify-content: center;
-    gap: 10px;
+    gap: clamp(6px, 1vw, 10px);
     margin-bottom: 20px;
     position: absolute;
     top: 20%;
     left: 10%;
     right: 10%;
+    overflow-x: auto;
+    padding-bottom: 8px;
 }
 
 .category-btn {
-    padding: 8px 12px;
+    flex: 0 0 auto;
+    padding: clamp(7px, 1dvh, 8px) clamp(9px, 1vw, 12px);
     border: 1px solid var(--border-color);
     border-radius: 8px;
     background: transparent;
     color: var(--border-color);
     cursor: pointer;
-    font-size: 16px;
+    font-size: clamp(13px, 1.1vw, 16px);
 }
 
 .category-btn.active {
@@ -569,20 +559,23 @@ label {
     color: var(--font-color);
 }
 
+/* ----------------------------------------------------------MENU BAR---------------------------------------------------------- */
 #menu {
   display: flex;
-  gap: 10px;
+  gap: clamp(4px, 0.8vw, 10px);
   justify-content: center;
+  flex-wrap: wrap;
+  max-width: calc(100% - 230px);
 }
 
 .menu-btn {
-  padding: 8px 12px;
+  padding: clamp(6px, 1dvh, 8px) clamp(8px, 1vw, 12px);
   border: none;
   border-radius: 8px;
   background: transparent;
   color: var(--font-color);
   cursor: pointer;
-  font-size: 16px;
+  font-size: clamp(12px, 1vw, 16px);
 }
 
 .menu-btn:hover {
@@ -614,6 +607,7 @@ label {
     z-index: 100;
 }
 
+/* ----------------------------------------------------------SETTINGS MODAL---------------------------------------------------------- */
 #settingsOverlay {
     position: fixed;
     top: 0;
